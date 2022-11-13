@@ -55,12 +55,12 @@
       {
         "fullscreen": false,
         "transparent":true,
-        "height": 900,
         "resizable": true,
         "title": "NahidaProject动漫后台管理系统",
-        "width": 1680,
         "decorations":false,
-        "center":true
+        "center":true,
+        "minWidth": 830,
+        "minHeight": 600
       }
     ]
   }

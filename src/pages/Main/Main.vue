@@ -8,15 +8,21 @@
                     <p>退出登录</p>
                 </template>
                 <template #title>
-                    <span>你好 {{username}}</span>
+                    <span>你好 {{ username }}</span>
                 </template>
-                <a-avatar>{{username.substring(0,1).toUpperCase()}}</a-avatar>
+                <a-avatar>{{ username.substring(0, 1).toUpperCase() }}</a-avatar>
             </a-popover>
+            <div class="close">
+                <down-circle-filled style="font-size:3em" @click="handleMin" />
+                <up-circle-filled style="font-size:3em" @click="handleMax" v-if="!appWindowStatus" />
+                <stop-filled style="font-size:3em" @click="handleMax" v-else />
+                <close-circle-two-tone style="font-size:3em" @click="handleClose" />
+            </div>
         </a-layout-header>
         <a-layout>
-            <a-layout-sider width="200" style="background: #fff;">
+            <a-layout-sider width="200">
                 <a-menu v-model:selectedKeys="selectedKeys2" v-model:openKeys="openKeys" mode="inline"
-                    :style="{ height: '100%', borderRight: 0 }">
+                    :style="{ height: '100%' }">
                     <a-menu-item key="0" class="dashboard">
                         <template #icon>
                             <PieChartOutlined />
@@ -57,7 +63,7 @@
                 </a-menu>
             </a-layout-sider>
             <a-layout>
-                <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '85vh' }">
+                <a-layout-content :style="{ background: '#fff', margin: '10px', minHeight: '84vh' }">
                     <!-- Content -->
                 </a-layout-content>
             </a-layout>
@@ -65,20 +71,64 @@
     </a-layout>
 </template>
 <script setup lang="ts">
-import { UserOutlined, SlackOutlined, EditOutlined, PieChartOutlined } from '@ant-design/icons-vue';
-import { ref } from 'vue';
+import {
+    UserOutlined,
+    SlackOutlined,
+    EditOutlined,
+    PieChartOutlined,
+    CloseCircleTwoTone,
+    DownCircleFilled,
+    UpCircleFilled,
+    StopFilled
+} from '@ant-design/icons-vue'
+import { ref } from 'vue'
+import { appWindow } from '@tauri-apps/api/window'
 // 默认子菜单
 const selectedKeys2 = ref<string[]>(['0'])
 // 默认菜单
 const openKeys = ref<string[]>()
 const username = ref<string>('baizhi958216')
+
+// 窗口状态
+const appWindowStatus = ref<boolean>(false)
+
+const handleMin = async () => {
+    await appWindow.minimize()
+}
+const handleMax = async () => {
+    if (appWindowStatus.value) {
+        await appWindow.unmaximize()
+        appWindowStatus.value = false
+    } else {
+        await appWindow.maximize()
+        appWindowStatus.value = true
+    }
+}
+const handleClose = async () => {
+    await appWindow.close()
+}
 </script>
 <style>
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgb(0, 0, 0);
+    user-select: none;
+    width: 80vw;
+    background: url(http://www.cilicili.cc/api/images/bg);
+    background-position: center;
+    background-size: cover;
+}
+
+.close {
+    position: absolute;
+    color: white;
+    right: 0;
+    width: 20vw;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-radius: 15px;
 }
 
 .header .logo {
@@ -94,15 +144,34 @@ const username = ref<string>('baizhi958216')
     font-weight: 600;
     font-size: 30px;
 }
-.ant-layout{
-    background: rgba(0,0,0,0);
-    background-color: rgba(0,0,0,0);
+
+.ant-layout {
+    background: rgba(255, 255, 255, 0);
 }
-.header,.ant-layout-content,.ant-layout-sider,.ant-layout-sider-children,.ant-menu{
-    border-radius: 22px;
+
+.header,
+.ant-layout-content,
+.ant-layout-sider,
+.ant-layout-sider-children {
+    border-radius: 15px;
 }
-.dashboard,.dashboard::after{
-    border-radius: 22px;
-    border-right: none!important;;
+
+.ant-menu {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.ant-layout-has-sider {
+    margin-top: 10px;
+    border-radius: 15px;
+    background-color: white;
+}
+
+.dashboard,
+.dashboard::after {
+    width: 80% !important;
+    margin: 0 auto;
+    border-radius: 20px;
+    border-right: none !important;
 }
 </style>
