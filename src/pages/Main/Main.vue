@@ -1,7 +1,7 @@
 <template>
     <a-layout>
-        <a-layout-header data-tauri-drag-region class="header">
-            <div class="logo" />
+        <a-layout-header class="header">
+            <div class="logo"/>
             <span class="title">Anime</span>
             <a-popover placement="bottomRight">
                 <template #content>
@@ -10,8 +10,9 @@
                 <template #title>
                     <span>你好 {{ username }}</span>
                 </template>
-                <a-avatar>{{ username.substring(0, 1).toUpperCase() }}</a-avatar>
+                <a-avatar style="z-index: 999;">{{ username.substring(0, 1).toUpperCase() }}</a-avatar>
             </a-popover>
+            <div class="cover" data-tauri-drag-region></div>
             <div class="close">
                 <down-circle-filled style="font-size:3em" @click="handleMin" />
                 <up-circle-filled style="font-size:3em" @click="handleMax" v-if="!appWindowStatus" />
@@ -120,6 +121,16 @@ const handleClose = async () => {
     background-size: cover;
 }
 
+.cover {
+    position: absolute;
+    width: 80vw;
+    background-color: rgba(0, 0, 0, 0.141);
+    height: 65px;
+    left: 0;
+    border-radius: 15px;
+    z-index: 1;
+}
+
 .close {
     position: absolute;
     color: white;
@@ -130,7 +141,9 @@ const handleClose = async () => {
     align-items: center;
     border-radius: 15px;
 }
-
+.header .logo,.header .title{
+    z-index: 999;
+}
 .header .logo {
     width: 130px;
     height: 70px;
