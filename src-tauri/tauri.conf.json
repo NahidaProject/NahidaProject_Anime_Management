@@ -27,7 +27,7 @@
         "icons/Nahida128x128.ico",
         "icons/Nahida.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "NahidaProject-Anime",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
