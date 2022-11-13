@@ -1,7 +1,7 @@
 <template>
     <a-layout>
         <a-layout-header class="header">
-            <div class="logo"/>
+            <div class="logo" />
             <span class="title">Anime</span>
             <a-popover placement="bottomRight">
                 <template #content>
@@ -64,7 +64,7 @@
                 </a-menu>
             </a-layout-sider>
             <a-layout>
-                <a-layout-content :style="{ background: '#fff', margin: '10px', minHeight: '84vh' }">
+                <a-layout-content :style="{ margin: '10px', minHeight: minheight }">
                     <!-- Content -->
                 </a-layout-content>
             </a-layout>
@@ -92,6 +92,15 @@ const username = ref<string>('baizhi958216')
 
 // 窗口状态
 const appWindowStatus = ref<boolean>(false)
+
+const minheight = ref<string>('500px')
+appWindow.onResized(async () => {
+    if (await appWindow.isMaximized()) {
+        minheight.value = (await appWindow.outerSize()).height - 110 + 'px'
+    } else {
+        minheight.value = (await appWindow.outerSize()).height - 100 + 'px'
+    }
+})
 
 const handleMin = async () => {
     await appWindow.minimize()
@@ -141,9 +150,12 @@ const handleClose = async () => {
     align-items: center;
     border-radius: 15px;
 }
-.header .logo,.header .title{
+
+.header .logo,
+.header .title {
     z-index: 999;
 }
+
 .header .logo {
     width: 130px;
     height: 70px;
