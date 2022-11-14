@@ -109,7 +109,7 @@ import MessageManagement from '../MessageManagement/MessageManagement.vue'
 const selectedKeys2 = ref<string[]>(['0'])
 // 默认菜单
 const openKeys = ref<string[]>()
-const username = ref<string>('baizhi958216')
+const username = ref<string>(document.cookie.split('=')[1])
 
 // 窗口状态
 const appWindowStatus = ref<boolean>(false)

@@ -37,6 +37,7 @@
                 </div>
             </a-form>
         </div>
+        <close-circle-two-tone :style="{ fontSize: '50px' }" @click="handleClose" />
     </div>
     <a-modal v-model:visible="modalVisible" :title=dialogtitle :mask=false centered @ok="modalVisible = false"
         :width="500" :okText="'确定'" :cancelText="'取消'">
@@ -46,7 +47,9 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { DownOutlined } from '@ant-design/icons-vue';
+import { CloseCircleTwoTone } from '@ant-design/icons-vue'
 import type { MenuProps } from 'ant-design-vue';
+import { appWindow } from '@tauri-apps/api/window';
 interface FormState {
     username: string;
     password: string;
@@ -56,11 +59,9 @@ const formState = reactive<FormState>({
     username: '',
     password: '',
     role: 'User'
-});
+})
 const currentrole = ref<string>('User')
-
 const modalVisible = ref<boolean>(false);
-
 const dialogtitle = ref<string>('')
 const dialogreason = ref<string>('')
 
@@ -86,11 +87,12 @@ const onFinish = (values: any) => {
         }
         setModalVisible(true)
     })
-};
+}
 
 const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
-};
+}
+
 const onClick: MenuProps['onClick'] = ({ key }) => {
     switch (key) {
         case '1':
@@ -104,7 +106,11 @@ const onClick: MenuProps['onClick'] = ({ key }) => {
         default:
             break;
     }
-};
+}
+
+const handleClose = async () => {
+    await appWindow.close()
+}
 </script>
 
 <style scoped>

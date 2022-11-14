@@ -11,9 +11,6 @@
                 <a-form-item label="密码" name="password" :rules="[{ required: true, message: '请输入密码!' }]">
                     <a-input-password v-model:value="formState.password" />
                 </a-form-item>
-                <a-form-item name="remember" :wrapper-col="{ offset: 8, span: 16 }">
-                    <a-checkbox style="color: white;" v-model:checked="formState.remember">记住我</a-checkbox>
-                </a-form-item>
                 <div style="display: flex;justify-content: space-around;">
                     <a-form-item>
                         <a-button type="primary">
@@ -26,6 +23,7 @@
                 </div>
             </a-form>
         </div>
+        <close-circle-two-tone :style="{fontSize:'50px'}" @click="handleClose"/>
     </div>
     <a-modal v-model:visible="modalVisible" title=登录失败 :mask=false centered @ok="modalVisible = false" :width="500"
         :okText="'确定'" :cancelText="'取消'">
@@ -34,22 +32,23 @@
 </template>
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
+import { CloseCircleTwoTone } from '@ant-design/icons-vue'
 import router from '../../router/router';
+import { appWindow } from '@tauri-apps/api/window';
 interface FormState {
     username: string;
     password: string;
-    remember: boolean;
 }
 const formState = reactive<FormState>({
     username: '',
     password: '',
-    remember: true,
-});
+})
 const modalVisible = ref<boolean>(false);
 
 const setModalVisible = (visible: boolean) => {
     modalVisible.value = visible;
 }
+
 const onFinish = (values: any) => {
     fetch('http://localhost:1314/api/login', {
         method: 'POST',
@@ -57,19 +56,24 @@ const onFinish = (values: any) => {
         headers: new Headers({
             'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
         }),
-        body: new URLSearchParams([['username', values.username], ['password', values.password]]).toString()
+        body: new URLSearchParams([['username', values.username.trim()], ['password', values.password.trim()]]).toString()
     }).then(res => res.text()).then(message => {
         if (message == 'Success') {
+            document.cookie = `username=${formState.username.trim()}`
             router.push('/index')
         } else {
             setModalVisible(true)
         }
     })
-};
+}
 
 const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
-};
+}
+
+const handleClose = async () => {
+    await appWindow.close()
+}
 </script>
 
 <style scoped>
