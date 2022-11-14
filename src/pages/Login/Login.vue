@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="logo" style="z-index: 1;" data-tauri-drag-region></div>
+        <div class="logo" data-tauri-drag-region></div>
         <div class="loginform" data-tauri-drag-region>
             <!-- <div class="cover"></div> -->
             <a-form :model="formState" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }"
@@ -77,6 +77,7 @@ const onFinishFailed = (errorInfo: any) => {
     width: 350px;
     height: 100vh;
     border-radius: 14px;
+    z-index: 99;
 }
 
 .container .loginform {
@@ -92,7 +93,7 @@ const onFinishFailed = (errorInfo: any) => {
     justify-content: center;
     align-items: center;
     border-radius: 14px;
-    margin-left: -50px;
+    margin-left: -150px;
 }
 </style>
 <style>
