@@ -5,7 +5,9 @@
             <span class="title">Anime</span>
             <a-popover placement="bottomRight">
                 <template #content>
-                    <p>退出登录</p>
+                    <p>
+                        <router-link to="/">退出登录</router-link>
+                    </p>
                 </template>
                 <template #title>
                     <span>你好 {{ username }}</span>
@@ -137,7 +139,17 @@ const handleClose = async () => {
     await appWindow.close()
 }
 </script>
+
 <style>
+.dashboard,
+.dashboard::after {
+    width: 80% !important;
+    margin: 0 auto;
+    border-radius: 20px;
+    border-right: none !important;
+}
+</style>
+<style scoped>
 .header {
     display: flex;
     align-items: center;
@@ -209,13 +221,5 @@ const handleClose = async () => {
     margin-top: 10px;
     border-radius: 15px;
     background-color: white;
-}
-
-.dashboard,
-.dashboard::after {
-    width: 80% !important;
-    margin: 0 auto;
-    border-radius: 20px;
-    border-right: none !important;
 }
 </style>

@@ -6,16 +6,16 @@ import Register from '../pages/Register/Register.vue'
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
-        component: Anime,
-        meta: {
-            title: 'Nahida Anime后台管理系统'
-        }
-    },
-    {
-        path: '/login',
         component: Login,
         meta: {
             title: '登录'
+        }
+    },
+    {
+        path: '/index',
+        component: Anime,
+        meta: {
+            title: 'Nahida Anime后台管理系统'
         }
     },
     {
