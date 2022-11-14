@@ -27,9 +27,13 @@
             </a-form>
         </div>
     </div>
+    <a-modal v-model:visible="modalVisible" title=登录失败 :mask=false centered @ok="modalVisible = false" :width="500"
+        :okText="'确定'" :cancelText="'取消'">
+        用户名或密码错误
+    </a-modal>
 </template>
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import router from '../../router/router';
 interface FormState {
     username: string;
@@ -41,9 +45,26 @@ const formState = reactive<FormState>({
     password: '',
     remember: true,
 });
+const modalVisible = ref<boolean>(false);
+
+const setModalVisible = (visible: boolean) => {
+    modalVisible.value = visible;
+}
 const onFinish = (values: any) => {
-    console.log('Success:', values);
-    router.push('/index')
+    fetch('http://localhost:1314/api/login', {
+        method: 'POST',
+        credentials: 'omit',
+        headers: new Headers({
+            'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
+        }),
+        body: new URLSearchParams([['username', values.username], ['password', values.password]]).toString()
+    }).then(res => res.text()).then(message => {
+        if (message == 'Success') {
+            router.push('/index')
+        } else {
+            setModalVisible(true)
+        }
+    })
 };
 
 const onFinishFailed = (errorInfo: any) => {

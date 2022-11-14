@@ -38,6 +38,10 @@
             </a-form>
         </div>
     </div>
+    <a-modal v-model:visible="modalVisible" :title=dialogtitle :mask=false centered @ok="modalVisible = false"
+        :width="500" :okText="'确定'" :cancelText="'取消'">
+        {{ dialogreason }}
+    </a-modal>
 </template>
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
@@ -51,11 +55,37 @@ interface FormState {
 const formState = reactive<FormState>({
     username: '',
     password: '',
-    role: ''
+    role: 'User'
 });
 const currentrole = ref<string>('User')
+
+const modalVisible = ref<boolean>(false);
+
+const dialogtitle = ref<string>('')
+const dialogreason = ref<string>('')
+
+const setModalVisible = (visible: boolean) => {
+    modalVisible.value = visible;
+}
+
 const onFinish = (values: any) => {
-    console.log('Success:', values);
+    fetch('http://localhost:1314/api/register', {
+        method: 'POST',
+        credentials: 'omit',
+        headers: new Headers({
+            'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
+        }),
+        body: new URLSearchParams([['username', values.username], ['password', values.password], ['role', values.role]]).toString()
+    }).then(res => res.text()).then(message => {
+        if (message !== 'Success') {
+            dialogtitle.value = '失败'
+            dialogreason.value = '该用户已存在'
+        } else {
+            dialogtitle.value = '成功'
+            dialogreason.value = '注册成功'
+        }
+        setModalVisible(true)
+    })
 };
 
 const onFinishFailed = (errorInfo: any) => {
