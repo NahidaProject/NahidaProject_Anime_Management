@@ -21,7 +21,7 @@
             </div>
         </a-layout-header>
         <a-layout>
-            <a-layout-sider width="200">
+            <a-layout-sider width="200" style="user-select: none;">
                 <a-menu v-model:selectedKeys="selectedKeys2" v-model:openKeys="openKeys" mode="inline"
                     :style="{ height: '100%' }">
                     <a-menu-item key="0" class="dashboard">
@@ -37,8 +37,9 @@
                                 用户管理
                             </span>
                         </template>
-                        <a-menu-item key="1">在线状态</a-menu-item>
-                        <a-menu-item key="2">资料修改</a-menu-item>
+                        <a-menu-item key="1">新增用户</a-menu-item>
+                        <a-menu-item key="2">删除用户</a-menu-item>
+                        <a-menu-item key="3">信息修改</a-menu-item>
                     </a-sub-menu>
                     <a-sub-menu key="sub2">
                         <template #title>
@@ -47,10 +48,10 @@
                                 番剧管理
                             </span>
                         </template>
-                        <a-menu-item key="3">所有番剧</a-menu-item>
-                        <a-menu-item key="4">新增番剧</a-menu-item>
-                        <a-menu-item key="5">更新番剧</a-menu-item>
-                        <a-menu-item key="6">删除番剧</a-menu-item>
+                        <a-menu-item key="4">所有番剧</a-menu-item>
+                        <a-menu-item key="5">新增番剧</a-menu-item>
+                        <a-menu-item key="6">更新番剧</a-menu-item>
+                        <a-menu-item key="7">删除番剧</a-menu-item>
                     </a-sub-menu>
                     <a-sub-menu key="sub3">
                         <template #title>
@@ -59,13 +60,21 @@
                                 留言管理
                             </span>
                         </template>
-                        <a-menu-item key="7">所有留言</a-menu-item>
+                        <a-menu-item key="8">所有留言</a-menu-item>
                     </a-sub-menu>
                 </a-menu>
             </a-layout-sider>
             <a-layout>
                 <a-layout-content :style="{ margin: '10px', minHeight: minheight }">
-                    <!-- Content -->
+                    <Dashboard v-if="selectedKeys2.toLocaleString() == '0'"></Dashboard>
+                    <AddUser v-if="selectedKeys2.toLocaleString() == '1'"></AddUser>
+                    <DeleteUser v-if="selectedKeys2.toLocaleString() == '2'"></DeleteUser>
+                    <UpdateUser v-if="selectedKeys2.toLocaleString() == '3'"></UpdateUser>
+                    <AllAnime v-if="selectedKeys2.toLocaleString() == '4'"></AllAnime>
+                    <AddAnime v-if="selectedKeys2.toLocaleString() == '5'"></AddAnime>
+                    <UpdateAnime v-if="selectedKeys2.toLocaleString() == '6'"></UpdateAnime>
+                    <DeleteAnime v-if="selectedKeys2.toLocaleString() == '7'"></DeleteAnime>
+                    <MessageManagement v-if="selectedKeys2.toLocaleString() == '8'"></MessageManagement>
                 </a-layout-content>
             </a-layout>
         </a-layout>
@@ -84,6 +93,16 @@ import {
 } from '@ant-design/icons-vue'
 import { ref } from 'vue'
 import { appWindow } from '@tauri-apps/api/window'
+import Dashboard from '../Dashboard/Dashboard.vue'
+import AddUser from '../UsersManagement/AddUser.vue'
+import DeleteUser from '../UsersManagement/DeleteUser.vue'
+import UpdateUser from '../UsersManagement/UpdateUser.vue'
+import AllAnime from '../AnimeManagement/AllAnime.vue'
+import AddAnime from '../AnimeManagement/AddAnime.vue'
+import UpdateAnime from '../AnimeManagement/UpdateAnime.vue'
+import DeleteAnime from '../AnimeManagement/DeleteAnime.vue'
+import MessageManagement from '../MessageManagement/MessageManagement.vue'
+
 // 默认子菜单
 const selectedKeys2 = ref<string[]>(['0'])
 // 默认菜单
@@ -93,7 +112,7 @@ const username = ref<string>('baizhi958216')
 // 窗口状态
 const appWindowStatus = ref<boolean>(false)
 
-const minheight = ref<string>('500px')
+const minheight = ref<string>('600px')
 appWindow.onResized(async () => {
     if (await appWindow.isMaximized()) {
         minheight.value = (await appWindow.outerSize()).height - 110 + 'px'

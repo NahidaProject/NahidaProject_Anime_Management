@@ -59,8 +59,8 @@
         "title": "NahidaProject动漫后台管理系统",
         "decorations":false,
         "center":true,
-        "minWidth": 830,
-        "minHeight": 600
+        "minWidth": 900,
+        "minHeight": 700
       }
     ]
   }
