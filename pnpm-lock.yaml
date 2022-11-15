@@ -4,9 +4,11 @@ specifiers:
   '@ant-design/icons-vue': ^6.1.0
   '@tauri-apps/api': ^1.2.0
   '@tauri-apps/cli': ^1.1.0
+  '@types/lodash-es': ^4.17.6
   '@types/node': ^18.7.10
   '@vitejs/plugin-vue': ^3.0.1
   ant-design-vue: ^3.2.15
+  lodash-es: ^4.17.21
   typescript: ^4.6.4
   unplugin-vue-components: ^0.22.9
   vite: ^3.0.2
@@ -18,12 +20,14 @@ dependencies:
   '@ant-design/icons-vue': 6.1.0_vue@3.2.45
   '@tauri-apps/api': 1.2.0
   ant-design-vue: 3.2.15_vue@3.2.45
+  lodash-es: 4.17.21
   unplugin-vue-components: 0.22.9_vue@3.2.45
   vue: 3.2.45
   vue-router: 4.1.6_vue@3.2.45
 
 devDependencies:
   '@tauri-apps/cli': 1.2.0
+  '@types/lodash-es': 4.17.6
   '@types/node': 18.11.9
   '@vitejs/plugin-vue': 3.2.0_vite@3.2.3+vue@3.2.45
   typescript: 4.8.4
@@ -260,6 +264,16 @@ packages:
   /@types/estree/1.0.0:
     resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
     dev: false
+
+  /@types/lodash-es/4.17.6:
+    resolution: {integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==}
+    dependencies:
+      '@types/lodash': 4.14.189
+    dev: true
+
+  /@types/lodash/4.14.189:
+    resolution: {integrity: sha512-kb9/98N6X8gyME9Cf7YaqIMvYGnBSWqEci6tiettE6iJWH1XdJz/PO8LB0GtLCG7x8dU3KWhZT+lA1a35127tA==}
+    dev: true
 
   /@types/node/18.11.9:
     resolution: {integrity: sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==}
