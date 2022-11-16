@@ -128,7 +128,7 @@ const onFinish = (values: any) => {
             dialogreason.value = '该用户已存在'
         } else {
             dialogtitle.value = '成功'
-            dialogreason.value = '注册成功'
+            dialogreason.value = '添加成功'
             loadUsers()
         }
         setModalVisible(true)

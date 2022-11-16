@@ -11,12 +11,21 @@
       </template>
     </a-table>
   </div>
+  <a-modal v-model:visible="modalVisible" :title=dialogtitle :mask=false centered @ok="modalVisible = false"
+    :width="500" :okText="'确定'" :cancelText="'取消'">
+    {{ dialogreason }}
+  </a-modal>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-
+const modalVisible = ref<boolean>(false);
+const dialogtitle = ref<string>('')
+const dialogreason = ref<string>('')
+const setModalVisible = (visible: boolean) => {
+  modalVisible.value = visible;
+}
 interface DataItem {
   id: string;
   username: string;
@@ -47,17 +56,23 @@ const columns = [
 const dataSource: Ref<DataItem[]> = ref([])
 
 const onDelete = (username: string) => {
-  fetch('http://localhost:1314/api/delete', {
+  fetch('http://localhost:1314/api/deleteUser', {
     method: 'POST',
     credentials: 'omit',
     headers: new Headers({
       'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
     }),
-    body: new URLSearchParams([['username', username]]).toString()
+    body: new URLSearchParams([['username', username], ['currentUser', document.cookie.split('=')[1]]]).toString()
   }).then(res => res.text()).then(message => {
     if (message == 'Success') {
+      dialogtitle.value = '成功'
+      dialogreason.value = '修改成功!'
       loadUsers()
+    } else {
+      dialogtitle.value = '失败'
+      dialogreason.value = '非法身份, 请联系管理员进行修改操作!'
     }
+    setModalVisible(true)
   })
 }
 

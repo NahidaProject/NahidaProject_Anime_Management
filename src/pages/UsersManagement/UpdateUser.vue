@@ -104,7 +104,7 @@ const edit = (id: string) => {
 }
 const cancel = (id: string) => {
     delete editableData[id];
-    console.log(dataSource);
+    loadUsers()
 }
 const loadUsers = () => fetch('http://localhost:1314/api/getAllUsers').then(req => req.json()).then(data => {
     dataSource.value = data

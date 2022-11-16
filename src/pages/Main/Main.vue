@@ -50,10 +50,10 @@
                                 番剧管理
                             </span>
                         </template>
-                        <a-menu-item key="4">所有番剧</a-menu-item>
-                        <a-menu-item key="5">新增番剧</a-menu-item>
-                        <a-menu-item key="6">更新番剧</a-menu-item>
-                        <a-menu-item key="7">删除番剧</a-menu-item>
+                        <!-- <a-menu-item key="4">所有番剧</a-menu-item> -->
+                        <a-menu-item key="4">新增番剧</a-menu-item>
+                        <a-menu-item key="5">更新番剧</a-menu-item>
+                        <a-menu-item key="6">删除番剧</a-menu-item>
                     </a-sub-menu>
                     <a-sub-menu key="sub3">
                         <template #title>
@@ -62,7 +62,7 @@
                                 留言管理
                             </span>
                         </template>
-                        <a-menu-item key="8">所有留言</a-menu-item>
+                        <a-menu-item key="7">所有留言</a-menu-item>
                     </a-sub-menu>
                 </a-menu>
             </a-layout-sider>
@@ -72,11 +72,11 @@
                     <AddUser v-if="selectedKeys2.toLocaleString() == '1'"></AddUser>
                     <DeleteUser v-if="selectedKeys2.toLocaleString() == '2'"></DeleteUser>
                     <UpdateUser v-if="selectedKeys2.toLocaleString() == '3'"></UpdateUser>
-                    <AllAnime v-if="selectedKeys2.toLocaleString() == '4'"></AllAnime>
-                    <AddAnime v-if="selectedKeys2.toLocaleString() == '5'"></AddAnime>
-                    <UpdateAnime v-if="selectedKeys2.toLocaleString() == '6'"></UpdateAnime>
-                    <DeleteAnime v-if="selectedKeys2.toLocaleString() == '7'"></DeleteAnime>
-                    <MessageManagement v-if="selectedKeys2.toLocaleString() == '8'"></MessageManagement>
+                    <!-- <AllAnime v-if="selectedKeys2.toLocaleString() == '4'"></AllAnime> -->
+                    <AddAnime v-if="selectedKeys2.toLocaleString() == '4'"></AddAnime>
+                    <UpdateAnime v-if="selectedKeys2.toLocaleString() == '5'"></UpdateAnime>
+                    <DeleteAnime v-if="selectedKeys2.toLocaleString() == '6'"></DeleteAnime>
+                    <MessageManagement v-if="selectedKeys2.toLocaleString() == '7'"></MessageManagement>
                 </a-layout-content>
             </a-layout>
         </a-layout>
@@ -99,7 +99,7 @@ import Dashboard from '../Dashboard/Dashboard.vue'
 import AddUser from '../UsersManagement/AddUser.vue'
 import DeleteUser from '../UsersManagement/DeleteUser.vue'
 import UpdateUser from '../UsersManagement/UpdateUser.vue'
-import AllAnime from '../AnimeManagement/AllAnime.vue'
+// import AllAnime from '../AnimeManagement/AllAnime.vue'
 import AddAnime from '../AnimeManagement/AddAnime.vue'
 import UpdateAnime from '../AnimeManagement/UpdateAnime.vue'
 import DeleteAnime from '../AnimeManagement/DeleteAnime.vue'
