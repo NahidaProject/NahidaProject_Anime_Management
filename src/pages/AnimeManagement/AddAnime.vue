@@ -139,7 +139,7 @@ const handleOk = () => {
             a_release_date: formState['a_release_date'],
             a_company: formState['a_company'],
             a_set: formState['a_set'],
-            a_type: formState['a_type'],
+            a_type: formState['a_type'].toString(),
             a_desc: formState['a_desc'],
             a_hot: formState['a_hot'],
             a_cv: formState['a_cv'],
