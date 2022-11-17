@@ -2,7 +2,7 @@
     <div class="container">
         <a-badge-ribbon text="Nahida Anime后台管理系统">
             <div class="userinfo">
-                <a-avatar :src="'http://localhost:1314/static/anime/userimage/' + username + '.jpg'"
+                <a-avatar :src="'http://localhost:1314/anime/userimage/' + username + '.jpg'"
                     :size="{ md: 200, lg: 300, xl: 300, xxl: 300 }">
                     <template #icon>
                         <AntDesignOutlined />
@@ -46,7 +46,7 @@ import { ClockCircleOutlined, AntDesignOutlined } from '@ant-design/icons-vue';
 const username = document.cookie.split('=')[1]
 let nowtimespan = '你好'
 const currenttime = ref('')
-const currentusers = ref('2')
+const currentusers = ref('0')
 const time = new Date().getHours()
 const status = ref('exception')
 if (time >= 6 && time < 9) {
@@ -63,7 +63,14 @@ if (time >= 6 && time < 9) {
     nowtimespan = '晚上好'
 }
 setInterval(() => {
-    status.value = 'success'
+    fetch('http://localhost:1314/serverStatus').then(res=>{
+        if(res.status==201){
+            status.value = 'success'
+        }
+    }).catch(e=>{
+        console.log(e);
+        status.value = 'exception'
+    })
     currenttime.value = new Date().toString().split(' ')[4]
 }, 1000)
 </script>

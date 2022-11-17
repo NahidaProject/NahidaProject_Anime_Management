@@ -93,7 +93,7 @@
             <a-card class="acard" v-for="(item, index) in animeList" hoverable>
                 <template #cover>
                     <div class="cover"
-                        :style="{ 'background-image': 'url(http://localhost:1314/static/anime/main_image/' + item['a_id'] + '.png)' }">
+                        :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + item['a_id'] + '.png)' }">
                     </div>
                 </template>
                 <a-card-meta :title="item['a_name']">
@@ -130,24 +130,23 @@ const setModalVisible = (visible: boolean) => {
 const handleOk = () => {
     fetch('http://localhost:1314/api/addAnime', {
         method: 'POST',
-        credentials: 'omit',
         headers: new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
+            'Content-Type': 'application/json' // 指定提交方式为表单提交
         }),
-        body: new URLSearchParams([
-            ['a_id', formState['a_id']],
-            ['a_name', formState['a_name']],
-            ['a_release_date', formState['a_release_date']],
-            ['a_company', formState['a_company']],
-            ['a_set', formState['a_set']],
-            ['a_type', formState['a_type']],
-            ['a_desc', formState['a_desc']],
-            ['a_hot', formState['a_hot']],
-            ['a_cv', formState['a_cv']],
-            ['a_stats', formState['a_stats']],
-            ['a_lang', formState['a_lang']],
-            ['a_recommend', formState['a_recommend']]
-        ]).toString()
+        body: JSON.stringify({
+            a_id: formState['a_id'],
+            a_name: formState['a_name'],
+            a_release_date: formState['a_release_date'],
+            a_company: formState['a_company'],
+            a_set: formState['a_set'],
+            a_type: formState['a_type'],
+            a_desc: formState['a_desc'],
+            a_hot: formState['a_hot'],
+            a_cv: formState['a_cv'],
+            a_stats: formState['a_stats'],
+            a_lang: formState['a_lang'],
+            a_recommend: formState['a_recommend']
+        })
     }).then(res => res.text()).then(message => {
         if (message !== 'Success') {
             dialogtitle.value = '失败'
@@ -169,6 +168,7 @@ const handleOk = () => {
 .modalclass .ant-dropdown-link {
     color: black;
 }
+
 .ant-modal-content .ant-modal-body {
     height: 60vh;
     overflow-y: scroll;

@@ -4,7 +4,7 @@
             <a-card @click="clickanime(item['a_id'])" class="acard" v-for="(item, index) in animeList" hoverable>
                 <template #cover>
                     <div class="cover"
-                        :style="{ 'background-image': 'url(http://localhost:1314/static/anime/main_image/' + item['a_id'] + '.png)' }">
+                        :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + item['a_id'] + '.png)' }">
                     </div>
                 </template>
                 <a-card-meta :title="item['a_name']">
@@ -37,14 +37,13 @@ const clickanime = (a_id: string) => {
 const deleteAnime = () => {
     modalVisible.value = false
     fetch('http://localhost:1314/api/deleteAnime', {
-        method: 'POST',
-        credentials: 'omit',
+        method: 'DELETE',
         headers: new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
+            'Content-Type': 'application/json' // 指定提交方式为表单提交
         }),
-        body: new URLSearchParams([
-            ['a_id', toremoveid.value]
-        ]).toString()
+        body: JSON.stringify({
+            a_id:toremoveid.value
+        })
     }).then(msg => msg.status).then(status => {
         if (status == 200) {
             loadAnime()

@@ -81,12 +81,17 @@ const save = (id: string) => {
     Object.assign(dataSource.value.filter(item => id === item.id)[0], editableData[id]);
     const _data = editableData[id]
     fetch('http://localhost:1314/api/updateUser', {
-        method: 'POST',
-        credentials: 'omit',
+        method: 'PUT',
         headers: new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
+            'Content-Type': 'application/json' // 指定提交方式为表单提交
         }),
-        body: new URLSearchParams([['id', _data.id], ['username', _data.username], ['password', _data.password], ['role', _data.role], ['currentUser', document.cookie.split('=')[1]]]).toString()
+        body: JSON.stringify({
+            id: _data.id,
+            username: _data.username,
+            password: _data.password,
+            role: _data.role,
+            currentUser: document.cookie.split('=')[1]
+        })
     }).then(req => req.text()).then(data => {
         if (data == 'Success') {
             dialogtitle.value = '成功'

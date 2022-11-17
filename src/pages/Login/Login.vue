@@ -23,7 +23,7 @@
                 </div>
             </a-form>
         </div>
-        <close-circle-two-tone :style="{fontSize:'50px'}" @click="handleClose"/>
+        <close-circle-two-tone :style="{ fontSize: '50px' }" @click="handleClose" />
     </div>
     <a-modal v-model:visible="modalVisible" title=登录失败 :mask=false centered @ok="modalVisible = false" :width="500"
         :okText="'确定'" :cancelText="'取消'">
@@ -52,11 +52,13 @@ const setModalVisible = (visible: boolean) => {
 const onFinish = (values: any) => {
     fetch('http://localhost:1314/api/login', {
         method: 'POST',
-        credentials: 'omit',
         headers: new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
+            'Content-Type': 'application/json' // 指定提交方式为表单提交
         }),
-        body: new URLSearchParams([['username', values.username.trim()], ['password', values.password.trim()]]).toString()
+        body: JSON.stringify({
+            username: values.username,
+            password: values.password
+        })
     }).then(res => res.text()).then(message => {
         if (message == 'Success') {
             document.cookie = `username=${formState.username.trim()}`

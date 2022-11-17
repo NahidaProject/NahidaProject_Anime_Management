@@ -4,7 +4,7 @@
             <a-card @click="updateanime(item['a_id'])" class="acard" v-for="(item, index) in animeList" hoverable>
                 <template #cover>
                     <div class="cover"
-                        :style="{ 'background-image': 'url(http://localhost:1314/static/anime/main_image/' + item['a_id'] + '.png)' }">
+                        :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + item['a_id'] + '.png)' }">
                     </div>
                 </template>
                 <a-card-meta :title="item['a_name']">
@@ -12,11 +12,11 @@
                 </a-card-meta>
             </a-card>
         </div>
-        <a-modal class="modalclass" v-model:visible="visible" okText="确定" cancelText="取消" title="新增番剧" @ok="handleOk"
+        <a-modal class="modalclass" v-model:visible="visible" okText="确定" cancelText="取消" title="更新番剧" @ok="handleOk"
             :mask="false">
             <a-form :model="formState" name="validate_other" v-bind="formItemLayout">
                 <a-form-item label="番剧id" name="a_id" :rules="[{ required: true, message: '请输入番剧id!' }]">
-                    <a-input v-model:value="formState.a_id" />
+                    <a-input disabled v-model:value="formState.a_id" />
                 </a-form-item>
 
                 <a-form-item label="番剧名" name="a_name" :rules="[{ required: true, message: '请输入番剧名!' }]">
@@ -125,33 +125,32 @@ const setModalVisible = (visible: boolean) => {
     modalVisible.value = visible;
 }
 const handleOk = () => {
-    fetch('http://localhost:1314/api/addAnime', {
-        method: 'POST',
-        credentials: 'omit',
+    fetch('http://localhost:1314/api/updateAnime', {
+        method: 'PUT',
         headers: new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
+            'Content-Type': 'application/json' // 指定提交方式为表单提交
         }),
-        body: new URLSearchParams([
-            ['a_id', formState['a_id']],
-            ['a_name', formState['a_name']],
-            ['a_release_date', formState['a_release_date']],
-            ['a_company', formState['a_company']],
-            ['a_set', formState['a_set']],
-            ['a_type', formState['a_type']],
-            ['a_desc', formState['a_desc']],
-            ['a_hot', formState['a_hot']],
-            ['a_cv', formState['a_cv']],
-            ['a_stats', formState['a_stats']],
-            ['a_lang', formState['a_lang']],
-            ['a_recommend', formState['a_recommend']]
-        ]).toString()
+        body: JSON.stringify({
+            a_id: formState['a_id'],
+            a_name: formState['a_name'],
+            a_release_date: formState['a_release_date'],
+            a_company: formState['a_company'],
+            a_set: formState['a_set'],
+            a_type: formState['a_type'].toString(),
+            a_desc: formState['a_desc'],
+            a_hot: formState['a_hot'],
+            a_cv: formState['a_cv'],
+            a_stats: formState['a_stats'],
+            a_lang: formState['a_lang'],
+            a_recommend: formState['a_recommend']
+        })
     }).then(res => res.text()).then(message => {
         if (message !== 'Success') {
             dialogtitle.value = '失败'
             dialogreason.value = '该番剧id已存在'
         } else {
             dialogtitle.value = '成功'
-            dialogreason.value = '添加成功'
+            dialogreason.value = '更新成功'
             formState = ({})
             loadAnime()
         }
@@ -161,14 +160,8 @@ const handleOk = () => {
 }
 
 const updateanime = async (a_id: string) => {
-    await fetch('http://localhost:1314/api/getAnimeById', {
-        method: 'POST',
-        credentials: 'omit',
-        headers: new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
-        }),
-        body: new URLSearchParams([
-            ['a_id', a_id]]).toString()
+    await fetch(`http://localhost:1314/api/getAnimeById/${a_id}`, {
+        method: 'GET',
     }).then(data => data.json()).then(anime => {
         const _a_type: string = anime['a_type']
         anime['a_type'] = _a_type.split(',')

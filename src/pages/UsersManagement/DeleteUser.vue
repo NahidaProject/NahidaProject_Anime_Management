@@ -57,16 +57,18 @@ const dataSource: Ref<DataItem[]> = ref([])
 
 const onDelete = (username: string) => {
   fetch('http://localhost:1314/api/deleteUser', {
-    method: 'POST',
-    credentials: 'omit',
+    method: 'DELETE',
     headers: new Headers({
-      'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
+      'Content-Type': 'application/json' // 指定提交方式为表单提交
     }),
-    body: new URLSearchParams([['username', username], ['currentUser', document.cookie.split('=')[1]]]).toString()
+    body: JSON.stringify({
+      username: username,
+      currentUser: document.cookie.split('=')[1]
+    })
   }).then(res => res.text()).then(message => {
     if (message == 'Success') {
       dialogtitle.value = '成功'
-      dialogreason.value = '修改成功!'
+      dialogreason.value = '已删除!'
       loadUsers()
     } else {
       dialogtitle.value = '失败'
