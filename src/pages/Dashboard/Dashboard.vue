@@ -21,14 +21,15 @@
                 <a-timeline-item color="green">后台管理系统前端界面基本实现 2022-11-13</a-timeline-item>
                 <a-timeline-item color="green">后端实现用户数据库CRUD, 后台管理系统用户注册登录 2022-11-15</a-timeline-item>
                 <a-timeline-item color="green">数据库动漫表创建, 后端动漫CRUD及前端渲染动漫剧集 2022-11-16</a-timeline-item>
-                <a-timeline-item color="red">
+                <a-timeline-item color="green">后端实现动漫海报/剧集上传, 前端实现动漫播放 2022-11-18</a-timeline-item>
+                <!-- <a-timeline-item color="red">
                     <template #dot>
                         <clock-circle-outlined style="font-size: 16px" />
                     </template>
                     后端提供视频切片, 前端播放视频 2022-11-17
                 </a-timeline-item>
                 <a-timeline-item>留言板CRUD 2022-11-18</a-timeline-item>
-                <a-timeline-item>项目完成 2022-11-19</a-timeline-item>
+                <a-timeline-item>项目完成 2022-11-19</a-timeline-item> -->
             </a-timeline>
             <div class="serverstat">
                 <a-tooltip title="服务器状态" :color="status == 'success' ? 'green' : 'red'">

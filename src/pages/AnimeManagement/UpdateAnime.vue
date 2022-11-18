@@ -1,15 +1,31 @@
 <template>
     <div class="container">
         <div class="animelist">
-            <a-card @click="updateanime(item['a_id'])" class="acard" v-for="(item, index) in animeList" hoverable>
+            <a-card class="acard" v-for="(item, index) in animeList" hoverable>
                 <template #cover>
                     <div class="cover"
                         :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + item['a_id'] + '.png)' }">
                     </div>
                 </template>
-                <a-card-meta :title="item['a_name']">
+                <a-card-meta :title="item['a_name']" class="acardname">
                     <template #description>{{ item['a_stats'] }}</template>
                 </a-card-meta>
+                <div class="animeupdate">
+                    <a-tooltip title="修改番剧详情">
+                        <a-button @click="updateanime(item['a_id'])" type="dashed" shape="circle" size="large">
+                            <template #icon>
+                                <edit-two-tone />
+                            </template>
+                        </a-button>
+                    </a-tooltip>
+                    <a-tooltip title="新增剧集">
+                        <a-button @click="uploadanime()" type="dashed" shape="circle" size="large">
+                            <template #icon>
+                                <plus-circle-two-tone />
+                            </template>
+                        </a-button>
+                    </a-tooltip>
+                </div>
             </a-card>
         </div>
         <a-modal class="modalclass" v-model:visible="visible" okText="确定" cancelText="取消" title="更新番剧" @ok="handleOk"
@@ -85,7 +101,8 @@
 
                 <a-form-item label="番剧封面">
                     <a-form-item name="a_image" no-style>
-                        <a-upload-dragger v-model:fileList="formState.dragger" name="files" action="/upload.do">
+                        <a-upload-dragger v-model:fileList="formState.dragger" :multiple="false" name="poster"
+                            action="http://localhost:1314/api/animePosterUpload">
                             <p class="ant-upload-drag-icon">
                                 <InboxOutlined />
                             </p>
@@ -100,19 +117,49 @@
             :width="500" :okText="'确定'" :cancelText="'取消'">
             {{ dialogreason }}
         </a-modal>
+        <a-modal class="modalclass" v-model:visible="uploadVisible" okText="确定" cancelText="取消" title="新增剧集"
+            @ok="videohandleOk" :mask="false">
+            <a-upload-dragger v-model:fileList="videofileList" name="videos" :multiple="false"
+                action="http://localhost:1314/api/animeVideosUpload" @change="videohandleChange"
+                @drop="videohandleDrop">
+                <p class="ant-upload-drag-icon">
+                    <inbox-outlined></inbox-outlined>
+                </p>
+                <p class="ant-upload-text">点击上传视频</p>
+                <p class="ant-upload-text">格式要求:番剧id_剧集.mp4</p>
+                <p class="ant-upload-text">如:000001_001.mp4</p>
+            </a-upload-dragger>
+        </a-modal>
     </div>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { InboxOutlined } from '@ant-design/icons-vue'
+import { InboxOutlined, EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons-vue'
 import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
+import { message, UploadChangeParam } from 'ant-design-vue';
 const formItemLayout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 14 },
 }
 let formState = reactive<Record<string, any>>({})
 const visible = ref<boolean>(false)
+const uploadVisible = ref<boolean>(false)
+let videofileList = ref()
+const videohandleChange = (info: UploadChangeParam) => {
+    const status = info.file.status;
+    if (status !== 'uploading') {
+        console.log(info.file, info.fileList);
+    }
+    if (status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully.`);
+    } else if (status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+    }
+};
+const videohandleDrop = (e: DragEvent) => {
+    console.log(e);
+}
 const animeList = ref([])
 const loadAnime = () => fetch('http://localhost:1314/api/getAllAnime').then(data => data.json()).then(anime => {
     animeList.value = anime
@@ -123,6 +170,10 @@ const dialogreason = ref<string>('')
 const modalVisible = ref<boolean>(false);
 const setModalVisible = (visible: boolean) => {
     modalVisible.value = visible;
+}
+const videohandleOk = () => {
+    uploadVisible.value = false
+    videofileList = ref()
 }
 const handleOk = () => {
     fetch('http://localhost:1314/api/updateAnime', {
@@ -174,27 +225,39 @@ const updateanime = async (a_id: string) => {
     })
     visible.value = true
 }
+
+const uploadanime = () => {
+    uploadVisible.value = true
+}
 </script>
-
 <style scoped>
-.animelist {
-    display: flex;
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    margin-top: 30px;
-}
-
-.acard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.cover {
+.ant-card-body {
     width: 160px;
-    height: 240px;
-    background-size: cover;
-    background-position: center;
+}
+
+.container {
+    overflow-y: scroll;
+    height: 84vh;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #8bc7ff;
+    border-radius: 100px;
+}
+</style>
+<style scoped>
+.animeupdate {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 20px;
 }
 </style>

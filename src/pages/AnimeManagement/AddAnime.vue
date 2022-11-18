@@ -96,7 +96,7 @@
                         :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + item['a_id'] + '.png)' }">
                     </div>
                 </template>
-                <a-card-meta :title="item['a_name']">
+                <a-card-meta :title="item['a_name']" class="acardname">
                     <template #description>{{ item['a_stats'] }}</template>
                 </a-card-meta>
             </a-card>
@@ -173,20 +173,24 @@ const handleOk = () => {
     height: 60vh;
     overflow-y: scroll;
 }
-</style>
-<style scoped>
+
 .animelist {
     display: flex;
-    width: 100%;
+    width: 66vw;
     flex-wrap: wrap;
     justify-content: space-around;
-    margin-top: 30px;
 }
 
 .acard {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 160px;
+    margin: 10px;
+}
+
+.acardname {
+    width: 120px;
 }
 
 .cover {
@@ -194,5 +198,29 @@ const handleOk = () => {
     height: 240px;
     background-size: cover;
     background-position: center;
+}
+</style>
+<style scoped>
+.ant-card-body {
+    width: 160px;
+}
+
+.container {
+    overflow-y: scroll;
+    height: 84vh;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #8bc7ff;
+    border-radius: 100px;
 }
 </style>
