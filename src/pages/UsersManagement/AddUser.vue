@@ -117,11 +117,14 @@ const setModalVisible = (visible: boolean) => {
 const onFinish = (values: any) => {
     fetch('http://localhost:1314/api/register', {
         method: 'POST',
-        credentials: 'omit',
         headers: new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
+            'Content-Type': 'application/json' // 指定提交方式为表单提交
         }),
-        body: new URLSearchParams([['username', values.username], ['password', values.password], ['role', values.role]]).toString()
+        body: JSON.stringify({
+            username: values.username,
+            password: values.password,
+            role: values.role
+        })
     }).then(res => res.text()).then(message => {
         if (message !== 'Success') {
             dialogtitle.value = '失败'
