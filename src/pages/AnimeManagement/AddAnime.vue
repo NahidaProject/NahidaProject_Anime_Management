@@ -74,7 +74,8 @@
 
                 <a-form-item label="番剧封面">
                     <a-form-item name="a_image" no-style>
-                        <a-upload-dragger v-model:fileList="formState.dragger" name="files" action="/upload.do">
+                        <a-upload-dragger v-model:fileList="formState.dragger" :multiple="false" name="poster"
+                            action="http://localhost:1314/api/animePosterUpload">
                             <p class="ant-upload-drag-icon">
                                 <InboxOutlined />
                             </p>
