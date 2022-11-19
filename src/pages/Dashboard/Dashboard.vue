@@ -10,7 +10,7 @@
                 </a-avatar>
                 <span>{{ nowtimespan }}, {{ username }}</span>
                 <div class="dash">
-                    <div class="onlineusers">在线人数 {{ currentusers }}</div>
+                    <div class="onlineusers">已有 {{ currentanime }} 部番剧</div>
                     <div class="currenttime">现在是 {{ currenttime }}</div>
                 </div>
             </div>
@@ -22,6 +22,7 @@
                 <a-timeline-item color="green">后端实现用户数据库CRUD, 后台管理系统用户注册登录 2022-11-15</a-timeline-item>
                 <a-timeline-item color="green">数据库动漫表创建, 后端动漫CRUD及前端渲染动漫剧集 2022-11-16</a-timeline-item>
                 <a-timeline-item color="green">后端实现动漫海报/剧集上传, 前端实现动漫播放 2022-11-18</a-timeline-item>
+                <a-timeline-item color="green">一言 2022-11-19</a-timeline-item>
                 <!-- <a-timeline-item color="red">
                     <template #dot>
                         <clock-circle-outlined style="font-size: 16px" />
@@ -42,12 +43,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ClockCircleOutlined, AntDesignOutlined } from '@ant-design/icons-vue';
+import { AntDesignOutlined } from '@ant-design/icons-vue';
 
 const username = document.cookie.split('=')[1]
 let nowtimespan = '你好'
 const currenttime = ref('')
-const currentusers = ref('0')
+const currentanime = ref('0')
 const time = new Date().getHours()
 const status = ref('exception')
 if (time >= 6 && time < 9) {
@@ -74,6 +75,9 @@ setInterval(() => {
     })
     currenttime.value = new Date().toString().split(' ')[4]
 }, 1000)
+fetch('http://localhost:1314/api/getAllAnime').then(res=>res.json()).then(anime=>{
+    currentanime.value = anime.length
+})
 </script>
 
 <style scoped>

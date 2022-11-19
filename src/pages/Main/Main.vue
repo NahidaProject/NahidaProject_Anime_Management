@@ -59,10 +59,10 @@
                         <template #title>
                             <span>
                                 <EditOutlined />
-                                留言管理
+                                一言管理
                             </span>
                         </template>
-                        <a-menu-item key="7">所有留言</a-menu-item>
+                        <a-menu-item key="7">新增语句</a-menu-item>
                     </a-sub-menu>
                 </a-menu>
             </a-layout-sider>
