@@ -19,7 +19,7 @@
                         </a-button>
                     </a-tooltip>
                     <a-tooltip title="新增剧集">
-                        <a-button @click="uploadanime()" type="dashed" shape="circle" size="large">
+                        <a-button @click="uploadanime(item['a_id'])" type="dashed" shape="circle" size="large">
                             <template #icon>
                                 <plus-circle-two-tone />
                             </template>
@@ -102,7 +102,7 @@
                 <a-form-item label="番剧封面">
                     <a-form-item name="a_image" no-style>
                         <a-upload-dragger v-model:fileList="formState.dragger" :multiple="false" name="poster"
-                            action="http://localhost:1314/api/animePosterUpload">
+                            :action=posterAction>
                             <p class="ant-upload-drag-icon">
                                 <InboxOutlined />
                             </p>
@@ -120,14 +120,13 @@
         <a-modal class="modalclass" v-model:visible="uploadVisible" okText="确定" cancelText="取消" title="新增剧集"
             @ok="videohandleOk" :mask="false">
             <a-upload-dragger v-model:fileList="videofileList" name="videos" :multiple="false"
-                action="http://localhost:1314/api/animeVideosUpload" @change="videohandleChange"
+                :action=videoAction @change="videohandleChange"
                 @drop="videohandleDrop">
                 <p class="ant-upload-drag-icon">
                     <inbox-outlined></inbox-outlined>
                 </p>
-                <p class="ant-upload-text">点击上传视频</p>
-                <p class="ant-upload-text">格式要求:番剧id_剧集.mp4</p>
-                <p class="ant-upload-text">如:000001_001.mp4</p>
+                <p class="ant-upload-text">确保已经修改了剧集后点击上传视频</p>
+                <p class="ant-upload-text">格式要求: mp4</p>
             </a-upload-dragger>
         </a-modal>
     </div>
@@ -167,7 +166,9 @@ const loadAnime = () => fetch('http://localhost:1314/api/getAllAnime').then(data
 loadAnime()
 const dialogtitle = ref<string>('')
 const dialogreason = ref<string>('')
-const modalVisible = ref<boolean>(false);
+const modalVisible = ref<boolean>(false)
+const posterAction = ref<string>('')
+const videoAction = ref<string>('')
 const setModalVisible = (visible: boolean) => {
     modalVisible.value = visible;
 }
@@ -214,6 +215,7 @@ const updateanime = async (a_id: string) => {
     await fetch(`http://localhost:1314/api/getAnimeById/${a_id}`, {
         method: 'GET',
     }).then(data => data.json()).then(anime => {
+        posterAction.value=`http://localhost:1314/api/animePosterUpload/${a_id}`
         const _a_type: string = anime['a_type']
         anime['a_type'] = _a_type.split(',')
         if (anime['a_recommend']) {
@@ -226,7 +228,8 @@ const updateanime = async (a_id: string) => {
     visible.value = true
 }
 
-const uploadanime = () => {
+const uploadanime = (a_id:string) => {
+    videoAction.value = `http://localhost:1314/api/animeVideosUpload/${a_id}`
     uploadVisible.value = true
 }
 </script>

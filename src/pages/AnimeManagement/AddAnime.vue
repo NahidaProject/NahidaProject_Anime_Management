@@ -75,7 +75,7 @@
                 <a-form-item label="番剧封面">
                     <a-form-item name="a_image" no-style>
                         <a-upload-dragger v-model:fileList="formState.dragger" :multiple="false" name="poster"
-                            action="http://localhost:1314/api/animePosterUpload">
+                            :action=posterAction>
                             <p class="ant-upload-drag-icon">
                                 <InboxOutlined />
                             </p>
@@ -105,7 +105,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { InboxOutlined } from '@ant-design/icons-vue'
 import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 const formItemLayout = {
@@ -124,7 +124,10 @@ const showModal = () => {
 }
 const dialogtitle = ref<string>('')
 const dialogreason = ref<string>('')
-const modalVisible = ref<boolean>(false);
+const modalVisible = ref<boolean>(false)
+const posterAction = computed(()=>{
+    return `http://localhost:1314/api/animePosterUpload/${formState['a_id']}`
+})
 const setModalVisible = (visible: boolean) => {
     modalVisible.value = visible;
 }
