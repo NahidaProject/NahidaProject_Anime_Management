@@ -34,6 +34,10 @@
                         <a-select-option value="原创">原创</a-select-option>
                         <a-select-option value="战斗">战斗</a-select-option>
                         <a-select-option value="日常">日常</a-select-option>
+                        <a-select-option value="喜剧">喜剧</a-select-option>
+                        <a-select-option value="动画">动画</a-select-option>
+                        <a-select-option value="校园">校园</a-select-option>
+                        <a-select-option value="百合">百合</a-select-option>
                     </a-select>
                 </a-form-item>
 
