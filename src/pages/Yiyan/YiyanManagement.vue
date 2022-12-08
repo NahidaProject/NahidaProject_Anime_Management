@@ -13,7 +13,7 @@
             <a-input v-model:value="fromwhere" style="width: 30%;" />
             <a-button type="primary" @click="submit">提交</a-button>
         </a-input-group>
-        <a-table :dataSource="yiyanList" :columns="columns" />
+        <a-table :dataSource="yiyanList" :columns="columns" :pagination="{ pageSize: 6 }"/>
     </div>
 </template>
 

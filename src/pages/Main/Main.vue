@@ -76,7 +76,7 @@
                     <AddAnime v-if="selectedKeys2.toLocaleString() == '4'"></AddAnime>
                     <UpdateAnime v-if="selectedKeys2.toLocaleString() == '5'"></UpdateAnime>
                     <DeleteAnime v-if="selectedKeys2.toLocaleString() == '6'"></DeleteAnime>
-                    <MessageManagement v-if="selectedKeys2.toLocaleString() == '7'"></MessageManagement>
+                    <Yiyan v-if="selectedKeys2.toLocaleString() == '7'"></Yiyan>
                 </a-layout-content>
             </a-layout>
         </a-layout>
@@ -103,7 +103,7 @@ import UpdateUser from '../UsersManagement/UpdateUser.vue'
 import AddAnime from '../AnimeManagement/AddAnime.vue'
 import UpdateAnime from '../AnimeManagement/UpdateAnime.vue'
 import DeleteAnime from '../AnimeManagement/DeleteAnime.vue'
-import MessageManagement from '../MessageManagement/MessageManagement.vue'
+import Yiyan from '../Yiyan/YiyanManagement.vue'
 
 // 默认子菜单
 const selectedKeys2 = ref<string[]>(['0'])
