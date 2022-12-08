@@ -36,7 +36,7 @@ const setModalVisible = (visible: boolean) => {
     modalVisible.value = visible;
 }
 const animeList = ref([])
-const loadAnime = () => fetch('http://localhost:1314/api/getAllAnime').then(data => data.json()).then(anime => {
+const loadAnime = () => fetch('http://localhost:1314/api/anime/getAllAnime').then(data => data.json()).then(anime => {
     animeList.value = anime
 })
 loadAnime()
@@ -48,7 +48,7 @@ const clickanime = (a_id: string) => {
 }
 const deleteAnime = () => {
     modalVisible.value = false
-    fetch('http://localhost:1314/api/deleteAnime', {
+    fetch('http://localhost:1314/api/anime/deleteAnime', {
         method: 'DELETE',
         headers: new Headers({
             'Content-Type': 'application/json' // 指定提交方式为表单提交

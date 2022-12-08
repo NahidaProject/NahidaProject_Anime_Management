@@ -164,7 +164,7 @@ const videohandleDrop = (e: DragEvent) => {
     console.log(e);
 }
 const animeList = ref([])
-const loadAnime = () => fetch('http://localhost:1314/api/getAllAnime').then(data => data.json()).then(anime => {
+const loadAnime = () => fetch('http://localhost:1314/api/anime/getAllAnime').then(data => data.json()).then(anime => {
     animeList.value = anime
 })
 loadAnime()
@@ -181,7 +181,7 @@ const videohandleOk = () => {
     videofileList = ref()
 }
 const handleOk = () => {
-    fetch('http://localhost:1314/api/updateAnime', {
+    fetch('http://localhost:1314/api/anime/updateAnime', {
         method: 'PUT',
         headers: new Headers({
             'Content-Type': 'application/json' // 指定提交方式为表单提交
@@ -216,10 +216,10 @@ const handleOk = () => {
 }
 
 const updateanime = async (a_id: string) => {
-    await fetch(`http://localhost:1314/api/getAnimeById/${a_id}`, {
+    await fetch(`http://localhost:1314/api/anime/getAnimeById/${a_id}`, {
         method: 'GET',
     }).then(data => data.json()).then(anime => {
-        posterAction.value=`http://localhost:1314/api/animePosterUpload/${a_id}`
+        posterAction.value=`http://localhost:1314/api/file/animePosterUpload/${a_id}`
         const _a_type: string = anime['a_type']
         anime['a_type'] = _a_type.split(',')
         if (anime['a_recommend']) {
@@ -233,7 +233,7 @@ const updateanime = async (a_id: string) => {
 }
 
 const uploadanime = (a_id:string) => {
-    videoAction.value = `http://localhost:1314/api/animeVideosUpload/${a_id}`
+    videoAction.value = `http://localhost:1314/api/file/animeVideosUpload/${a_id}`
     uploadVisible.value = true
 }
 </script>

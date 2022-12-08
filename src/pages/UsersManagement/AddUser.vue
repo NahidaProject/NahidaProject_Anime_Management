@@ -106,7 +106,7 @@ const columns = [
 ]
 let fdata = ref([])
 
-const loadUsers = () => fetch('http://localhost:1314/api/getAllUsers').then(req => req.json()).then(data => {
+const loadUsers = () => fetch('http://localhost:1314/api/users/getAllUsers').then(req => req.json()).then(data => {
     fdata.value = data
 })
 loadUsers()
@@ -115,7 +115,7 @@ const setModalVisible = (visible: boolean) => {
 }
 
 const onFinish = (values: any) => {
-    fetch('http://localhost:1314/api/register', {
+    fetch('http://localhost:1314/api/users/register', {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json' // 指定提交方式为表单提交
@@ -135,7 +135,7 @@ const onFinish = (values: any) => {
             loadUsers()
         }
         setModalVisible(true)
-        fetch('http://localhost:1314/api/getAllUsers').then(req => req.text()).then(data => {
+        fetch('http://localhost:1314/api/users/getAllUsers').then(req => req.text()).then(data => {
             users.value = data
         })
     })

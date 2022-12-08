@@ -50,7 +50,7 @@ const setModalVisible = (visible: boolean) => {
 }
 
 const onFinish = (values: any) => {
-    fetch('http://localhost:1314/api/login', {
+    fetch('http://localhost:1314/api/users/login', {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json' // 指定提交方式为表单提交

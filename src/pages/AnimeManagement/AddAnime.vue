@@ -119,7 +119,7 @@ const formItemLayout = {
 let formState = reactive<Record<string, any>>({})
 const visible = ref<boolean>(false)
 const animeList = ref([])
-const loadAnime = () => fetch('http://localhost:1314/api/getAllAnime').then(data => data.json()).then(anime => {
+const loadAnime = () => fetch('http://localhost:1314/api/anime/getAllAnime').then(data => data.json()).then(anime => {
     animeList.value = anime
 })
 loadAnime()
@@ -130,13 +130,13 @@ const dialogtitle = ref<string>('')
 const dialogreason = ref<string>('')
 const modalVisible = ref<boolean>(false)
 const posterAction = computed(()=>{
-    return `http://localhost:1314/api/animePosterUpload/${formState['a_id']}`
+    return `http://localhost:1314/api/file/animePosterUpload/${formState['a_id']}`
 })
 const setModalVisible = (visible: boolean) => {
     modalVisible.value = visible;
 }
 const handleOk = () => {
-    fetch('http://localhost:1314/api/addAnime', {
+    fetch('http://localhost:1314/api/anime/addAnime', {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json' // 指定提交方式为表单提交

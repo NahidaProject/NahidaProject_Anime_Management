@@ -41,7 +41,7 @@ const columns = [
         key: 'fromwhere',
     },
 ]
-const getallyiyan = () => fetch('http://localhost:1314/api/getallyiyan').then(res => res.json()).then(yiyan => {
+const getallyiyan = () => fetch('http://localhost:1314/api/yiyan/getallyiyan').then(res => res.json()).then(yiyan => {
     yiyanList.value = yiyan
 })
 getallyiyan()
@@ -49,7 +49,7 @@ const addyiyan = () => {
     add.value = !add.value
 }
 const submit = async() => {
-    await fetch('http://localhost:1314/api/addyiyan', {
+    await fetch('http://localhost:1314/api/yiyan/addyiyan', {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json' // 指定提交方式为表单提交

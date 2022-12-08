@@ -56,7 +56,7 @@ const columns = [
 const dataSource: Ref<DataItem[]> = ref([])
 
 const onDelete = (username: string) => {
-  fetch('http://localhost:1314/api/deleteUser', {
+  fetch('http://localhost:1314/api/users/deleteUser', {
     method: 'DELETE',
     headers: new Headers({
       'Content-Type': 'application/json' // 指定提交方式为表单提交
@@ -78,7 +78,7 @@ const onDelete = (username: string) => {
   })
 }
 
-const loadUsers = () => fetch('http://localhost:1314/api/getAllUsers').then(req => req.json()).then(data => {
+const loadUsers = () => fetch('http://localhost:1314/api/users/getAllUsers').then(req => req.json()).then(data => {
   dataSource.value = data
 })
 loadUsers()
