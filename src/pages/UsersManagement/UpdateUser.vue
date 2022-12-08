@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <a-table :dataSource="dataSource" :columns="columns">
+        <a-table :dataSource="dataSource" :columns="columns" :pagination="{ pageSize: 7 }">
             <template #bodyCell="{ column, text, record }">
                 <template v-if="['username', 'password', 'role'].includes(column.dataIndex)">
                     <div>
