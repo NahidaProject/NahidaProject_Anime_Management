@@ -1,39 +1,9 @@
 <template>
     <div class="container">
-        <a-form class="registerform" :model="formState" name="basic" :label-col="{ span: 8 }"
-            :wrapper-col="{ span: 16 }" autocomplete="off" @finish="onFinish" @finishFailed="onFinishFailed">
-            <a-form-item name="username" :rules="[{ required: true, message: '请输入用户名!' }]">
-                用户名:
-                <a-input v-model:value="formState.username" />
-            </a-form-item>
-            <a-form-item name="password" :rules="[{ required: true, message: '请输入密码!' }]">
-                密码:
-                <a-input-password v-model:value="formState.password" />
-            </a-form-item>
-            <a-form-item name="role" :rules="[{ required: true, message: '请选择角色组!' }]">
-                <div style="width: 90px;">
-                    角色组:
-                </div>
-                <a-dropdown>
-                    <a class="ant-dropdown-link" @click.prevent>
-                        {{ currentrole }}
-                        <DownOutlined />
-                    </a>
-                    <template #overlay>
-                        <a-menu @click="onClick">
-                            <a-menu-item key="1">Admin</a-menu-item>
-                            <a-menu-item key="2">User</a-menu-item>
-                        </a-menu>
-                    </template>
-                </a-dropdown>
-            </a-form-item>
-            <a-form-item>
-                <a-button type="primary" html-type="submit">添加</a-button>
-            </a-form-item>
-        </a-form>
+        <a-button type="primary" @click="showModal">新增</a-button>
         <a-table :columns="columns" :data-source="fdata" :pagination="{ pageSize: 7 }">
             <template #headerCell="{ column }">
-                <template v-if="column.key === 'username'">
+                <template v-if="column.key === 'UserName'">
                     <span>
                         用户名
                     </span>
@@ -41,26 +11,67 @@
             </template>
 
             <template #bodyCell="{ column, record }">
-                <template v-if="column.key === 'username'">
+                <template v-if="column.key === 'UserName'">
                     <span>
-                        {{ record.username }}
+                        {{ record.UserName }}
                     </span>
                 </template>
-                <template v-else-if="column.key === 'password'">
+                <template v-else-if="column.key === 'UserAccount'">
                     <span>
-                        {{ record.password }}
+                        {{ record.UserAccount }}
                     </span>
                 </template>
-                <template v-else-if="column.key === 'role'">
+                <template v-else-if="column.key === 'UserEmail'">
                     <span>
-                        {{ record.role }}
+                        {{ record.UserEmail }}
+                    </span>
+                </template>
+                <template v-else-if="column.key === 'UserRegisterDate'">
+                    <span>
+                        {{ record.UserRegisterDate }}
                     </span>
                 </template>
             </template>
         </a-table>
-        <a-modal v-model:visible="modalVisible" :title=dialogtitle :mask=false centered @ok="modalVisible = false"
-            :width="500" :okText="'确定'" :cancelText="'取消'">
-            {{ dialogreason }}
+        <a-modal :mask="false" v-model:visible="visible" title="新增用户" @ok="handleOk" @cancel="handleCancel"
+            cancelText="取消" okText="确定">
+            <a-form class="newuserform" :model="formState" name="basic" :label-col="{ span: 8 }"
+                :wrapper-col="{ span: 16 }" autocomplete="off">
+                <a-form-item label="用户名" name="UserName" :rules="[{ required: true, message: '用户名为必填项!' }]">
+                    <a-input v-model:value="formState.UserName" />
+                </a-form-item>
+
+                <a-form-item label="账号" name="UserAccount" :rules="[{ required: true, message: '账号为必填项!' }]">
+                    <a-input v-model:value="formState.UserAccount" />
+                </a-form-item>
+
+                <a-form-item label="邮箱" name="UserEmail" :rules="[{ required: true, message: '邮箱为必填项!' }]">
+                    <a-input v-model:value="formState.UserEmail" />
+                </a-form-item>
+
+                <a-form-item label="密码" name="UserPassword" :rules="[{ required: true, message: '密码为必填项!' }]">
+                    <a-input v-model:value="formState.UserPassword" />
+                </a-form-item>
+
+                <a-form-item label="简介" name="UserDescription" :rules="[{ required: true, message: '用户简介为必填项!' }]">
+                    <a-textarea v-model:value="formState.UserDescription" />
+                </a-form-item>
+
+                <a-form-item label="性别" name="UserGender" :rules="[{ required: true, message: '性别为必填项!' }]">
+                    <a-dropdown>
+                        <a class="ant-dropdown-link" @click.prevent>
+                            {{ currentsex }}
+                            <DownOutlined />
+                        </a>
+                        <template #overlay>
+                            <a-menu @click="onSexClick">
+                                <a-menu-item key="1">男</a-menu-item>
+                                <a-menu-item key="0">女</a-menu-item>
+                            </a-menu>
+                        </template>
+                    </a-dropdown>
+                </a-form-item>
+            </a-form>
         </a-modal>
     </div>
 </template>
@@ -69,98 +80,104 @@
 import { reactive, ref } from 'vue';
 import { DownOutlined } from '@ant-design/icons-vue';
 import type { MenuProps } from 'ant-design-vue';
+const visible = ref<boolean>(false);
+const showModal = () => {
+    visible.value = true;
+};
+
+const currentsex = ref<string>('男')
+
 interface FormState {
-    username: string;
-    password: string;
-    role: string
+    UserID: string;
+    UserName: string;
+    UserPassword: string;
+    UserAccount: string;
+    UserEmail: string;
+    UserDescription: string;
+    UserRegisterDate: string;
+    UserGender: string
 }
 const formState = reactive<FormState>({
-    username: '',
-    password: '',
-    role: 'User'
-})
-const currentrole = ref<string>('User')
-const modalVisible = ref<boolean>(false);
-const dialogtitle = ref<string>('')
-const dialogreason = ref<string>('')
-const users = ref<string>()
+    UserID: '',
+    UserName: '',
+    UserPassword: '',
+    UserAccount: '',
+    UserEmail: '',
+    UserDescription: '',
+    UserRegisterDate: '',
+    UserGender: ''
+});
 const columns = [
     {
         name: '用户名',
-        dataIndex: 'username',
-        key: 'username',
+        dataIndex: 'UserName',
+        key: 'UserName',
         ellipsis: true
     },
     {
-        title: '密码',
-        dataIndex: 'password',
-        key: 'password',
+        title: '账号',
+        dataIndex: 'UserAccount',
+        key: 'UserAccount',
         ellipsis: true
     },
     {
-        title: '角色组',
-        dataIndex: 'role',
-        key: 'role',
+        title: '邮箱',
+        dataIndex: 'UserEmail',
+        key: 'UserEmail',
+        ellipsis: true
+    },
+    {
+        title: '注册日期',
+        dataIndex: 'UserRegisterDate',
+        key: 'UserRegisterDate',
         ellipsis: true
     }
 ]
 let fdata = ref([])
 
-const loadUsers = () => fetch('http://localhost:1314/api/users/getAllUsers').then(req => req.json()).then(data => {
+const loadUsers = () => fetch('http://localhost:1314/api/user/GetAllUsers').then(req => req.json()).then(data => {
     fdata.value = data
 })
 loadUsers()
-const setModalVisible = (visible: boolean) => {
-    modalVisible.value = visible;
-}
-
-const onFinish = (values: any) => {
-    fetch('http://localhost:1314/api/users/register', {
+const handleOk = () => {
+    const date = new Date()
+    formState['UserID'] = (fdata.value.length + 1).toString()
+    formState['UserRegisterDate'] = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+    fetch('http://localhost:1314/api/user/NewUser', {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json' // 指定提交方式为表单提交
         }),
-        body: JSON.stringify({
-            username: values.username,
-            password: values.password,
-            role: values.role
-        })
-    }).then(res => res.text()).then(message => {
-        if (message !== 'Success') {
-            dialogtitle.value = '失败'
-            dialogreason.value = '该用户已存在'
-        } else {
-            dialogtitle.value = '成功'
-            dialogreason.value = '添加成功'
+        body: JSON.stringify(formState)
+    }).then(res => res.json()).then(data => {
+        if (data == 'SUCCESS') {
+            visible.value = false
             loadUsers()
+        } else {
+            console.log(`ERROR${data}`)
         }
-        setModalVisible(true)
-        fetch('http://localhost:1314/api/users/getAllUsers').then(req => req.text()).then(data => {
-            users.value = data
-        })
     })
-}
+};
+const handleCancel = () => {
+    console.log('点击了取消');
 
-const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
 }
-
-const onClick: MenuProps['onClick'] = ({ key }) => {
+const onSexClick: MenuProps['onClick'] = ({ key }) => {
     switch (key) {
         case '1':
-            currentrole.value = 'Admin'
-            formState.role = 'Admin'
+            currentsex.value = '男'
+            formState.UserGender = '男'
             break;
-        case '2':
-            currentrole.value = 'User'
-            formState.role = 'User'
+        case '0':
+            currentsex.value = '女'
+            formState.UserGender = '女'
             break;
         default:
             break;
     }
 }
-</script>
 
+</script>
 <style scoped>
 .container {
     width: 650px;
@@ -171,19 +188,8 @@ const onClick: MenuProps['onClick'] = ({ key }) => {
     transform: translate(-50%, -50%);
 }
 
-.registerform {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.ant-form-item-label>label,
-.ant-dropdown-link {
-    color: black;
-}
-
-.ant-input,
-.ant-input-password {
-    width: 200px;
+.newuserform {
+    position: relative;
+    left: -10%;
 }
 </style>

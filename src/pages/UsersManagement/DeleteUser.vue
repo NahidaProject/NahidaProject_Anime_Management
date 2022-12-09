@@ -1,96 +1,127 @@
 <template>
-  <div class="container">
-    <a-table bordered :data-source="dataSource" :columns="columns" :pagination="{ pageSize: 7 }">
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex === 'operation'">
-          <a-popconfirm v-if="dataSource.length" ok-text="确定" cancel-text="取消" title="确认删除该用户?"
-            @confirm="onDelete(record.username)">
-            <a>删除</a>
-          </a-popconfirm>
-        </template>
-      </template>
-    </a-table>
-  </div>
-  <a-modal v-model:visible="modalVisible" :title=dialogtitle :mask=false centered @ok="modalVisible = false"
-    :width="500" :okText="'确定'" :cancelText="'取消'">
-    {{ dialogreason }}
-  </a-modal>
+    <div class="container">
+        <a-table :columns="columns" :data-source="fdata" :pagination="{ pageSize: 7 }">
+            <template #headerCell="{ column }">
+                <template v-if="column.key === 'UserName'">
+                    <span>
+                        用户名
+                    </span>
+                </template>
+            </template>
+
+            <template #bodyCell="{ column, record }">
+                <template v-if="column.key === 'UserName'">
+                    <span>
+                        {{ record.UserName }}
+                    </span>
+                </template>
+                <template v-else-if="column.key === 'UserAccount'">
+                    <span>
+                        {{ record.UserAccount }}
+                    </span>
+                </template>
+                <template v-else-if="column.key === 'UserEmail'">
+                    <span>
+                        {{ record.UserEmail }}
+                    </span>
+                </template>
+                <template v-else-if="column.key === 'UserRegisterDate'">
+                    <span>
+                        {{ record.UserRegisterDate }}
+                    </span>
+                </template>
+                <template v-else-if="column.key === 'delete'">
+                    <a-tooltip title="删除用户">
+                        <a-button @click="ClickUser(record)" type="dashed" shape="circle">
+                            <template #icon>
+                                <close-circle-two-tone two-tone-color="#eb2f96" />
+                            </template>
+                        </a-button>
+                    </a-tooltip>
+                </template>
+            </template>
+        </a-table>
+    </div>
+    <a-modal v-model:visible="modalVisible" title="提示" :mask=false centered @ok="DeleteUser" :width="500" :okText="'确定'"
+        :cancelText="'取消'">
+        确定删除这个用户吗?
+    </a-modal>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Ref } from 'vue'
+import { ref } from 'vue';
+import { CloseCircleTwoTone } from '@ant-design/icons-vue'
 const modalVisible = ref<boolean>(false);
-const dialogtitle = ref<string>('')
-const dialogreason = ref<string>('')
 const setModalVisible = (visible: boolean) => {
-  modalVisible.value = visible;
-}
-interface DataItem {
-  id: string;
-  username: string;
-  password: string;
-  role: string;
+    modalVisible.value = visible;
 }
 const columns = [
-  {
-    title: '用户名',
-    dataIndex: 'username',
-    ellipsis: true
-  },
-  {
-    title: '密码',
-    dataIndex: 'username',
-    ellipsis: true
-  },
-  {
-    title: '用户组',
-    dataIndex: 'role',
-    ellipsis: true
-  },
-  {
-    title: '删除',
-    dataIndex: 'operation',
-  },
-]
-const dataSource: Ref<DataItem[]> = ref([])
-
-const onDelete = (username: string) => {
-  fetch('http://localhost:1314/api/users/deleteUser', {
-    method: 'DELETE',
-    headers: new Headers({
-      'Content-Type': 'application/json' // 指定提交方式为表单提交
-    }),
-    body: JSON.stringify({
-      username: username,
-      currentUser: document.cookie.split('=')[1]
-    })
-  }).then(res => res.text()).then(message => {
-    if (message == 'Success') {
-      dialogtitle.value = '成功'
-      dialogreason.value = '已删除!'
-      loadUsers()
-    } else {
-      dialogtitle.value = '失败'
-      dialogreason.value = '非法身份, 请联系管理员进行修改操作!'
+    {
+        name: '用户名',
+        dataIndex: 'UserName',
+        key: 'UserName',
+        ellipsis: true
+    },
+    {
+        title: '账号',
+        dataIndex: 'UserAccount',
+        key: 'UserAccount',
+        ellipsis: true
+    },
+    {
+        title: '邮箱',
+        dataIndex: 'UserEmail',
+        key: 'UserEmail',
+        ellipsis: true
+    },
+    {
+        title: '注册日期',
+        dataIndex: 'UserRegisterDate',
+        key: 'UserRegisterDate',
+        ellipsis: true
+    },
+    {
+        title: '删除',
+        key: 'delete'
     }
-    setModalVisible(true)
-  })
-}
+]
+let fdata = ref([])
 
-const loadUsers = () => fetch('http://localhost:1314/api/users/getAllUsers').then(req => req.json()).then(data => {
-  dataSource.value = data
+const loadUsers = () => fetch('http://localhost:1314/api/user/GetAllUsers').then(req => req.json()).then(data => {
+    fdata.value = data
 })
 loadUsers()
+// 获取点击的用户ID
+const toDeleteUserID = ref('')
+const ClickUser = (record: any) => {
+    toDeleteUserID.value = record['UserID']
+    setModalVisible(true)
+}
+const DeleteUser = () => {
+    fetch('http://localhost:1314/api/user/DeleteUser', {
+        method: 'DELETE',
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify({
+            UserID: toDeleteUserID.value
+        })
+    }).then(res => res.json()).then(data => {
+        if (data === 'SUCCESS') {
+            loadUsers()
+            setModalVisible(false)
+        }
+    })
+}
 </script>
 
 <style scoped>
 .container {
-  width: 650px;
-  height: 600px;
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    width: 650px;
+    height: 600px;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 </style>

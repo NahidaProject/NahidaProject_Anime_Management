@@ -1,124 +1,217 @@
 <template>
     <div class="container">
-        <a-table :dataSource="dataSource" :columns="columns" :pagination="{ pageSize: 7 }">
-            <template #bodyCell="{ column, text, record }">
-                <template v-if="['username', 'password', 'role'].includes(column.dataIndex)">
-                    <div>
-                        <a-input v-if="editableData[record.id]"
-                            v-model:value="editableData[record.id][column.dataIndex]" style="margin: -5px 0" />
-                        <template v-else>
-                            {{ text }}
-                        </template>
-                    </div>
+        <a-table :columns="columns" :data-source="fdata" :pagination="{ pageSize: 7 }">
+            <template #headerCell="{ column }">
+                <template v-if="column.key === 'UserName'">
+                    <span>
+                        用户名
+                    </span>
                 </template>
+            </template>
 
-                <template v-if="column.dataIndex === 'operation'">
-                    <div class="editable-row-operations">
-                        <span v-if="editableData[record.id]">
-                            <a-typography-link @click="save(record.id)">保存</a-typography-link>
-                            <a-popconfirm title="取消编辑吗?" @confirm="cancel(record.id)" ok-text="确定" cancel-text="取消">
-                                <a>取消</a>
-                            </a-popconfirm>
-                        </span>
-                        <span v-else>
-                            <a @click="edit(record.id)">编辑</a>
-                        </span>
-                    </div>
+            <template #bodyCell="{ column, record }">
+                <template v-if="column.key === 'UserName'">
+                    <span>
+                        {{ record.UserName }}
+                    </span>
+                </template>
+                <template v-else-if="column.key === 'UserAccount'">
+                    <span>
+                        {{ record.UserAccount }}
+                    </span>
+                </template>
+                <template v-else-if="column.key === 'UserEmail'">
+                    <span>
+                        {{ record.UserEmail }}
+                    </span>
+                </template>
+                <template v-else-if="column.key === 'UserRegisterDate'">
+                    <span>
+                        {{ record.UserRegisterDate }}
+                    </span>
+                </template>
+                <template v-else-if="column.key === 'Update'">
+                    <a-tooltip title="修改用户资料">
+                        <a-button @click="ClickUser(record)" type="dashed" shape="circle">
+                            <template #icon>
+                                <edit-two-tone />
+                            </template>
+                        </a-button>
+                    </a-tooltip>
                 </template>
             </template>
         </a-table>
+        <a-modal :mask="false" v-model:visible="visible" title="修改用户资料" @ok="handleOk" @cancel="handleCancel"
+            cancelText="取消" okText="确定">
+            <a-form class="updateuserform" :model="formState" name="basic" :label-col="{ span: 8 }"
+                :wrapper-col="{ span: 16 }" autocomplete="off">
+                <a-form-item label="ID" name="UserID">
+                    <a-input disabled v-model:value="formState.UserID" />
+                </a-form-item>
+
+                <a-form-item label="注册日期" name="UserRegisterDate">
+                    <a-input disabled v-model:value="formState.UserRegisterDate" />
+                </a-form-item>
+
+                <a-form-item label="用户名" name="UserName" :rules="[{ required: true, message: '用户名为必填项!' }]">
+                    <a-input v-model:value="formState.UserName" />
+                </a-form-item>
+
+                <a-form-item label="账号" name="UserAccount" :rules="[{ required: true, message: '账号为必填项!' }]">
+                    <a-input v-model:value="formState.UserAccount" />
+                </a-form-item>
+
+                <a-form-item label="邮箱" name="UserEmail" :rules="[{ required: true, message: '邮箱为必填项!' }]">
+                    <a-input v-model:value="formState.UserEmail" />
+                </a-form-item>
+
+                <a-form-item label="密码" name="UserPassword" :rules="[{ required: true, message: '密码为必填项!' }]">
+                    <a-input v-model:value="formState.UserPassword" />
+                </a-form-item>
+
+                <a-form-item label="简介" name="UserDescription" :rules="[{ required: true, message: '用户简介为必填项!' }]">
+                    <a-textarea v-model:value="formState.UserDescription" />
+                </a-form-item>
+
+                <a-form-item label="性别" name="UserGender" :rules="[{ required: true, message: '性别为必填项!' }]">
+                    <a-dropdown>
+                        <a class="ant-dropdown-link" @click.prevent>
+                            {{ currentsex }}
+                            <DownOutlined />
+                        </a>
+                        <template #overlay>
+                            <a-menu @click="onSexClick">
+                                <a-menu-item key="1">男</a-menu-item>
+                                <a-menu-item key="0">女</a-menu-item>
+                            </a-menu>
+                        </template>
+                    </a-dropdown>
+                </a-form-item>
+            </a-form>
+        </a-modal>
     </div>
-    <a-modal v-model:visible="modalVisible" :title=dialogtitle :mask=false centered @ok="modalVisible = false"
-        :width="500" :okText="'确定'" :cancelText="'取消'">
-        {{ dialogreason }}
-    </a-modal>
 </template>
+
 <script setup lang="ts">
-import { cloneDeep } from 'lodash-es';
 import { reactive, ref } from 'vue';
-const editableData: any = reactive({});
-const modalVisible = ref<boolean>(false);
-const dialogtitle = ref<string>('')
-const dialogreason = ref<string>('')
-const setModalVisible = (visible: boolean) => {
-    modalVisible.value = visible;
+import { EditTwoTone, DownOutlined } from '@ant-design/icons-vue'
+import type { MenuProps } from 'ant-design-vue';
+const visible = ref<boolean>(false);
+const showModal = () => {
+    visible.value = true;
+};
+
+const currentsex = ref<string>('')
+
+interface FormState {
+    UserID: string;
+    UserName: string;
+    UserPassword: string;
+    UserAccount: string;
+    UserEmail: string;
+    UserDescription: string;
+    UserRegisterDate: string;
+    UserGender: string
 }
+let formState = reactive<FormState>({
+    UserID: '',
+    UserName: '',
+    UserPassword: '',
+    UserAccount: '',
+    UserEmail: '',
+    UserDescription: '',
+    UserRegisterDate: '',
+    UserGender: ''
+});
 const columns = [
     {
-        title: '用户名',
-        dataIndex: 'username',
-        key: 'username',
-        width: '25%',
+        name: '用户名',
+        dataIndex: 'UserName',
+        key: 'UserName',
+        ellipsis: true
     },
     {
-        title: '密码',
-        dataIndex: 'password',
-        key: 'password',
-        width: '25%',
+        title: '账号',
+        dataIndex: 'UserAccount',
+        key: 'UserAccount',
+        ellipsis: true
     },
     {
-        title: '用户组',
-        dataIndex: 'role',
-        key: 'role',
-        width: '15%',
+        title: '邮箱',
+        dataIndex: 'UserEmail',
+        key: 'UserEmail',
+        ellipsis: true
     },
     {
-        title: '编辑',
-        dataIndex: 'operation',
-        key: 'operation',
+        title: '注册日期',
+        dataIndex: 'UserRegisterDate',
+        key: 'UserRegisterDate',
+        ellipsis: true
+    },
+    {
+        title: '修改',
+        key: 'Update'
     }
 ]
-interface DataItem {
-    id: string;
-    username: string;
-    password: string;
-    role: string;
-}
-const tbdata: DataItem[] = [];
-const dataSource = ref(tbdata);
-
-const save = (id: string) => {
-    Object.assign(dataSource.value.filter(item => id === item.id)[0], editableData[id]);
-    const _data = editableData[id]
-    fetch('http://localhost:1314/api/users/updateUser', {
-        method: 'PUT',
-        headers: new Headers({
-            'Content-Type': 'application/json' // 指定提交方式为表单提交
-        }),
-        body: JSON.stringify({
-            id: _data.id,
-            username: _data.username,
-            password: _data.password,
-            role: _data.role,
-            currentUser: document.cookie.split('=')[1]
-        })
-    }).then(req => req.text()).then(data => {
-        if (data == 'Success') {
-            dialogtitle.value = '成功'
-            dialogreason.value = '修改成功!'
-            delete editableData[id];
-        } else {
-            dialogtitle.value = '失败'
-            dialogreason.value = '非法身份, 请联系管理员进行修改操作!'
-        }
-        setModalVisible(true)
-    })
-}
-const edit = (id: string) => {
-    editableData[id] = cloneDeep(dataSource.value.filter(item => id === item.id)[0]);
-}
-const cancel = (id: string) => {
-    delete editableData[id];
-    loadUsers()
-}
-const loadUsers = () => fetch('http://localhost:1314/api/users/getAllUsers').then(req => req.json()).then(data => {
-    dataSource.value = data
+// 加载所有用户
+let fdata = ref([])
+const loadUsers = () => fetch('http://localhost:1314/api/user/GetAllUsers').then(req => req.json()).then(data => {
+    fdata.value = data
 })
 loadUsers()
+// 获取点击的用户ID
+const ClickUser = (record: any) => {
+    formState = record
+    currentsex.value = record['UserGender']
+    showModal()
+}
+const handleOk = () => {
+    fetch('http://localhost:1314/api/user/UpdateUser', {
+        method: 'PUT',
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify(formState)
+    }).then(res => res.json()).then(data => {
+        if (data == 'SUCCESS') {
+            visible.value = false
+            loadUsers()
+        } else {
+            console.log(`ERROR${data}`)
+        }
+    })
+};
+const handleCancel = () => {
+    console.log('点击了取消');
+}
+const onSexClick: MenuProps['onClick'] = ({ key }) => {
+    switch (key) {
+        case '1':
+            currentsex.value = '男'
+            formState.UserGender = '男'
+            break;
+        case '0':
+            currentsex.value = '女'
+            formState.UserGender = '女'
+            break;
+        default:
+            break;
+    }
+}
 </script>
 
 <style scoped>
-.editable-row-operations a {
-    margin-right: 8px;
+.container {
+    width: 650px;
+    height: 600px;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.updateuserform {
+    position: relative;
+    left: -10%;
 }
 </style>
