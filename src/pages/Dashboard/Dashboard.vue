@@ -2,7 +2,7 @@
     <div class="container">
         <a-badge-ribbon text="Nahida Anime后台管理系统">
             <div class="userinfo">
-                <a-avatar :src="'http://localhost:1314/anime/userimage/' + username + '.jpg'"
+                <a-avatar :src="'http://localhost:1314/anime/userimage/' + useraccount + '.jpg'"
                     :size="{ md: 200, lg: 300, xl: 300, xxl: 300 }">
                     <template #icon>
                         <AntDesignOutlined />
@@ -42,15 +42,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { AntDesignOutlined } from '@ant-design/icons-vue';
 
-const username = document.cookie.split('=')[1]
+const username = ref<String>('')
 let nowtimespan = '你好'
 const currenttime = ref('')
 const currentanime = ref('0')
 const time = new Date().getHours()
 const status = ref('exception')
+const useraccount = document.cookie.split('=')[1]
+fetch(`http://localhost:1314/api/admin/${useraccount}`).then(data => data.json()).then(res => {
+    username.value = res
+})
 if (time >= 6 && time < 9) {
     nowtimespan = '早上好'
 } else if (time >= 9 && time < 11) {
@@ -64,18 +68,28 @@ if (time >= 6 && time < 9) {
 } else {
     nowtimespan = '晚上好'
 }
-setInterval(() => {
-    fetch('http://localhost:1314/serverStatus').then(res=>{
-        if(res.status==201){
-            status.value = 'success'
-        }
-    }).catch(e=>{
-        console.log(e);
-        status.value = 'exception'
-    })
-    currenttime.value = new Date().toString().split(' ')[4]
-}, 1000)
-fetch('http://localhost:1314/api/getAllAnime').then(res=>res.json()).then(anime=>{
+
+var getstatus: NodeJS.Timer
+
+onMounted(() => {
+    getstatus = setInterval(() => {
+        fetch('http://localhost:1314/serverStatus').then(res => {
+            if (res.status == 201) {
+                status.value = 'success'
+            }
+        }).catch(e => {
+            console.log(e);
+            status.value = 'exception'
+        })
+        currenttime.value = new Date().toString().split(' ')[4]
+    }, 1000)
+})
+
+onUnmounted(() => {
+    clearInterval(getstatus)
+})
+
+fetch('http://localhost:1314/api/anime/GetAllAnimes').then(res => res.json()).then(anime => {
     currentanime.value = anime.length
 })
 </script>
