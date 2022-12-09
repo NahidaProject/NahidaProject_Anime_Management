@@ -72,7 +72,6 @@
                     <AddUser v-if="selectedKeys2.toLocaleString() == '1'"></AddUser>
                     <DeleteUser v-if="selectedKeys2.toLocaleString() == '2'"></DeleteUser>
                     <UpdateUser v-if="selectedKeys2.toLocaleString() == '3'"></UpdateUser>
-                    <!-- <AllAnime v-if="selectedKeys2.toLocaleString() == '4'"></AllAnime> -->
                     <AddAnime v-if="selectedKeys2.toLocaleString() == '4'"></AddAnime>
                     <UpdateAnime v-if="selectedKeys2.toLocaleString() == '5'"></UpdateAnime>
                     <DeleteAnime v-if="selectedKeys2.toLocaleString() == '6'"></DeleteAnime>
@@ -99,7 +98,6 @@ import Dashboard from '../Dashboard/Dashboard.vue'
 import AddUser from '../UsersManagement/AddUser.vue'
 import DeleteUser from '../UsersManagement/DeleteUser.vue'
 import UpdateUser from '../UsersManagement/UpdateUser.vue'
-// import AllAnime from '../AnimeManagement/AllAnime.vue'
 import AddAnime from '../AnimeManagement/AddAnime.vue'
 import UpdateAnime from '../AnimeManagement/UpdateAnime.vue'
 import DeleteAnime from '../AnimeManagement/DeleteAnime.vue'
@@ -109,7 +107,11 @@ import Yiyan from '../Yiyan/YiyanManagement.vue'
 const selectedKeys2 = ref<string[]>(['0'])
 // 默认菜单
 const openKeys = ref<string[]>()
-const username = ref<string>(document.cookie.split('=')[1])
+const username = ref<string>('')
+
+fetch(`http://localhost:1314/api/admin/${document.cookie.split('=')[1]}`).then(data => data.json()).then(res => {
+    username.value = res
+})
 
 // 窗口状态
 const appWindowStatus = ref<boolean>(false)
