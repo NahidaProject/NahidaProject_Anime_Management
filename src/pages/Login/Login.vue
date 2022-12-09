@@ -3,13 +3,13 @@
         <div class="logo" data-tauri-drag-region></div>
         <div class="loginform" data-tauri-drag-region>
             <!-- <div class="cover"></div> -->
-            <a-form :model="formState" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }"
+            <a-form class="login" :model="formState" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }"
                 autocomplete="off" @finish="onFinish" @finishFailed="onFinishFailed">
-                <a-form-item label="用户名" name="username" :rules="[{ required: true, message: '请输入用户名!' }]">
-                    <a-input v-model:value="formState.username" />
+                <a-form-item label="账号" name="AdminAccount" :rules="[{ required: true, message: '请输入用户账号!' }]">
+                    <a-input v-model:value="formState.AdminAccount" />
                 </a-form-item>
-                <a-form-item label="密码" name="password" :rules="[{ required: true, message: '请输入密码!' }]">
-                    <a-input-password v-model:value="formState.password" />
+                <a-form-item label="密码" name="AdminPassword" :rules="[{ required: true, message: '请输入密码!' }]">
+                    <a-input-password v-model:value="formState.AdminPassword" />
                 </a-form-item>
                 <div style="display: flex;justify-content: space-around;">
                     <a-form-item>
@@ -36,12 +36,12 @@ import { CloseCircleTwoTone } from '@ant-design/icons-vue'
 import router from '../../router/router';
 import { appWindow } from '@tauri-apps/api/window';
 interface FormState {
-    username: string;
-    password: string;
+    AdminAccount: string;
+    AdminPassword: string;
 }
 const formState = reactive<FormState>({
-    username: '',
-    password: '',
+    AdminAccount: '',
+    AdminPassword: '',
 })
 const modalVisible = ref<boolean>(false);
 
@@ -49,19 +49,19 @@ const setModalVisible = (visible: boolean) => {
     modalVisible.value = visible;
 }
 
-const onFinish = (values: any) => {
-    fetch('http://localhost:1314/api/users/login', {
+const onFinish = (values: { AdminAccount: string; AdminPassword: string }) => {
+    fetch('http://localhost:1314/api/admin/admin_login', {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json' // 指定提交方式为表单提交
         }),
         body: JSON.stringify({
-            username: values.username,
-            password: values.password
+            AdminAccount: values.AdminAccount,
+            AdminPassword: values.AdminPassword
         })
-    }).then(res => res.text()).then(message => {
-        if (message == 'Success') {
-            document.cookie = `username=${formState.username.trim()}`
+    }).then(res => res.json()).then(message => {
+        if (message == 'SUCCESS') {
+            document.cookie = `AdminAccount=${formState.AdminAccount.trim()}`
             router.push('/index')
         } else {
             setModalVisible(true)
@@ -77,7 +77,6 @@ const handleClose = async () => {
     await appWindow.close()
 }
 </script>
-
 <style scoped>
 .container {
     height: 100vh;
@@ -124,7 +123,7 @@ const handleClose = async () => {
 }
 </style>
 <style>
-.ant-form-item-label>label {
-    color: white;
+.login .ant-form-item-label>label {
+    color: white
 }
 </style>

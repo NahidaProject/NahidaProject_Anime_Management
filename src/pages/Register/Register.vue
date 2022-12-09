@@ -3,28 +3,18 @@
         <div class="logo" data-tauri-drag-region></div>
         <div class="loginform" data-tauri-drag-region>
             <!-- <div class="cover"></div> -->
-            <a-form :model="formState" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }"
-                autocomplete="off" @finish="onFinish" @finishFailed="onFinishFailed">
-                <a-form-item label="用户名" name="username" :rules="[{ required: true, message: '请输入用户名!' }]">
-                    <a-input v-model:value="formState.username" />
+            <a-form class="register" :model="formState" name="basic" :label-col="{ span: 8 }"
+                :wrapper-col="{ span: 16 }" autocomplete="off" @finish="onFinish" @finishFailed="onFinishFailed">
+                <a-form-item label="昵称" name="AdminName" :rules="[{ required: true, message: '请输入昵称!' }]">
+                    <a-input v-model:value="formState.AdminName" />
                 </a-form-item>
-                <a-form-item label="密码" name="password" :rules="[{ required: true, message: '请输入密码!' }]">
-                    <a-input-password v-model:value="formState.password" />
+                <a-form-item label="账号" name="AdminAccount" :rules="[{ required: true, message: '请输入账号!' }]">
+                    <a-input v-model:value="formState.AdminAccount" />
                 </a-form-item>
-                <a-form-item label="角色组" name="role" :rules="[{ required: true, message: '请选择角色组!' }]">
-                    <a-dropdown>
-                        <a class="ant-dropdown-link" @click.prevent>
-                            {{ currentrole }}
-                            <DownOutlined />
-                        </a>
-                        <template #overlay>
-                            <a-menu @click="onClick">
-                                <a-menu-item key="1">Admin</a-menu-item>
-                                <a-menu-item key="2">User</a-menu-item>
-                            </a-menu>
-                        </template>
-                    </a-dropdown>
+                <a-form-item label="密码" name="AdminPassword" :rules="[{ required: true, message: '请输入密码!' }]">
+                    <a-input-password v-model:value="formState.AdminPassword" />
                 </a-form-item>
+
                 <div style="display: flex;justify-content: space-around;">
                     <a-form-item>
                         <a-button type="primary">
@@ -46,21 +36,18 @@
 </template>
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import { DownOutlined } from '@ant-design/icons-vue';
 import { CloseCircleTwoTone } from '@ant-design/icons-vue'
-import type { MenuProps } from 'ant-design-vue';
 import { appWindow } from '@tauri-apps/api/window';
 interface FormState {
-    username: string;
-    password: string;
-    role: string
+    AdminName: string;
+    AdminPassword: string;
+    AdminAccount: string
 }
 const formState = reactive<FormState>({
-    username: '',
-    password: '',
-    role: 'User'
+    AdminName: '',
+    AdminPassword: '',
+    AdminAccount: ''
 })
-const currentrole = ref<string>('User')
 const modalVisible = ref<boolean>(false);
 const dialogtitle = ref<string>('')
 const dialogreason = ref<string>('')
@@ -69,21 +56,21 @@ const setModalVisible = (visible: boolean) => {
     modalVisible.value = visible;
 }
 
-const onFinish = (values: any) => {
-    fetch('http://localhost:1314/api/users/register', {
+const onFinish = (values: { AdminName: string; AdminAccount: string; AdminPassword: string }) => {
+    fetch('http://localhost:1314/api/admin/admin_register', {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json' // 指定提交方式为表单提交
         }),
         body: JSON.stringify({
-            username: values.username,
-            password: values.password,
-            role: values.role
+            AdminName: values.AdminName,
+            AdminAccount: values.AdminAccount,
+            AdminPassword: values.AdminPassword
         })
-    }).then(res => res.text()).then(message => {
-        if (message !== 'Success') {
+    }).then(res => res.json()).then(message => {
+        if (message !== 'SUCCESS') {
             dialogtitle.value = '失败'
-            dialogreason.value = '该用户已存在'
+            dialogreason.value = '该账号已存在'
         } else {
             dialogtitle.value = '成功'
             dialogreason.value = '注册成功'
@@ -94,21 +81,6 @@ const onFinish = (values: any) => {
 
 const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
-}
-
-const onClick: MenuProps['onClick'] = ({ key }) => {
-    switch (key) {
-        case '1':
-            currentrole.value = 'Admin'
-            formState.role = 'Admin'
-            break;
-        case '2':
-            currentrole.value = 'User'
-            formState.role = 'User'
-            break;
-        default:
-            break;
-    }
 }
 
 const handleClose = async () => {
@@ -162,8 +134,7 @@ const handleClose = async () => {
 }
 </style>
 <style>
-.ant-form-item-label>label,
-.ant-dropdown-link {
-    color: white;
+.register .ant-form-item-label>label {
+    color: white
 }
 </style>
