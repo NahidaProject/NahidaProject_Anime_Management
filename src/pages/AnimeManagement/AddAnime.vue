@@ -4,29 +4,29 @@
         <a-modal class="modalclass" v-model:visible="visible" okText="确定" cancelText="取消" title="新增番剧" @ok="handleOk"
             :mask="false">
             <a-form :model="formState" name="validate_other" v-bind="formItemLayout">
-                <a-form-item label="番剧id" name="a_id" :rules="[{ required: true, message: '请输入番剧id!' }]">
-                    <a-input v-model:value="formState.a_id" />
+                <a-form-item label="番剧id" name="aid">
+                    <a-input disabled v-model:value="formState.aid" />
                 </a-form-item>
 
-                <a-form-item label="番剧名" name="a_name" :rules="[{ required: true, message: '请输入番剧名!' }]">
-                    <a-input v-model:value="formState.a_name" />
+                <a-form-item label="番剧名" name="aname" :rules="[{ required: true, message: '请输入番剧名!' }]">
+                    <a-input v-model:value="formState.aname" />
                 </a-form-item>
 
-                <a-form-item name="a_release_date" label="番剧发布日期" :rules="[{ required: true, message: '请选择番剧发布日期!' }]">
-                    <a-date-picker :locale="locale" placeholder="年-月-日" v-model:value="formState.a_release_date"
+                <a-form-item name="areldate" label="番剧发布日期" :rules="[{ required: true, message: '请选择番剧发布日期!' }]">
+                    <a-date-picker :locale="locale" placeholder="年-月-日" v-model:value="formState.areldate"
                         value-format="YYYY-MM-DD" />
                 </a-form-item>
 
-                <a-form-item label="番剧出品公司" name="a_company" :rules="[{ required: true, message: '请输入番剧出品公司!' }]">
-                    <a-input v-model:value="formState.a_company" />
+                <a-form-item label="番剧出品公司" name="acompany" :rules="[{ required: true, message: '请输入番剧出品公司!' }]">
+                    <a-input v-model:value="formState.acompany" />
                 </a-form-item>
 
-                <a-form-item name="a_set" label="已更新剧集" :rules="[{ required: true, message: '滑动选择已更新剧集!' }]">
-                    <a-slider v-model:value="formState.a_set" />
+                <a-form-item name="aepisode" label="已更新剧集" :rules="[{ required: true, message: '滑动选择已更新剧集!' }]">
+                    <a-slider v-model:value="formState.aepisode" />
                 </a-form-item>
 
-                <a-form-item name="a_type" label="番剧类型[多选]" :rules="[{ type: 'array' }]">
-                    <a-select v-model:value="formState['a_type']" mode="multiple" placeholder="番剧类型">
+                <a-form-item name="type" label="番剧类型[多选]" :rules="[{ type: 'array' }]">
+                    <a-select v-model:value="formState['type']" mode="multiple" placeholder="番剧类型">
                         <a-select-option value="小说改">小说改</a-select-option>
                         <a-select-option value="魔法">魔法</a-select-option>
                         <a-select-option value="奇幻">奇幻</a-select-option>
@@ -41,36 +41,37 @@
                     </a-select>
                 </a-form-item>
 
-                <a-form-item name="a_desc" label="番剧描述" :rules="[{ required: true, message: '请输入番剧描述!' }]">
-                    <a-textarea v-model:value="formState['a_desc']" placeholder="输入番剧描述" :rows="4" />
+                <a-form-item name="adesc" label="番剧描述" :rules="[{ required: true, message: '请输入番剧描述!' }]">
+                    <a-textarea v-model:value="formState['adesc']" placeholder="输入番剧描述" :rows="4" />
                 </a-form-item>
 
-                <a-form-item name="a_hot" label="番剧热度" :rules="[{ required: true, message: '滑动选择番剧热度!' }]">
-                    <a-slider v-model:value="formState.a_hot" />
+                <a-form-item name="ahot" label="番剧热度" :rules="[{ required: true, message: '滑动选择番剧热度!' }]">
+                    <a-slider v-model:value="formState.ahot" />
                 </a-form-item>
 
-                <a-form-item label="番剧cv" name="a_cv" :rules="[{ required: true, message: '请输入番剧cv!' }]">
-                    <a-textarea v-model:value="formState['a_cv']" placeholder="输入番剧cv" :rows="4" />
+                <a-form-item label="番剧cv" name="cvname" :rules="[{ required: true, message: '请输入番剧cv!' }]">
+                    <a-textarea v-model:value="formState['cvname']" placeholder="输入番剧cv" :rows="4" />
                 </a-form-item>
 
-                <a-form-item name="a_stats" label="番剧状态" has-feedback
+                <a-form-item name="astats" label="番剧状态" has-feedback
                     :rules="[{ required: true, message: '请选择番剧状态!' }]">
-                    <a-select v-model:value="formState.a_stats" placeholder="选择番剧状态">
+                    <a-select v-model:value="formState.astats" placeholder="选择番剧状态">
                         <a-select-option value="连载中">连载中</a-select-option>
                         <a-select-option value="已完结">已完结</a-select-option>
                     </a-select>
                 </a-form-item>
 
-                <a-form-item name="a_lang" label="语言" has-feedback :rules="[{ required: true, message: '请选择番剧语言!' }]">
-                    <a-select v-model:value="formState.a_lang" placeholder="选择番剧语言">
+                <a-form-item name="alang" label="语言" has-feedback :rules="[{ required: true, message: '请选择番剧语言!' }]">
+                    <a-select v-model:value="formState.alang" placeholder="选择番剧语言">
+                        <a-select-option value="粤语">粤语</a-select-option>
                         <a-select-option value="国语">国语</a-select-option>
                         <a-select-option value="日语">日语</a-select-option>
                         <a-select-option value="英语">英语</a-select-option>
                     </a-select>
                 </a-form-item>
 
-                <a-form-item name="a_recommend" label="上推荐" :rules="[{ required: true, message: '请选择是否推荐!' }]">
-                    <a-radio-group v-model:value="formState['a_recommend']">
+                <a-form-item name="arecommend" label="上推荐" :rules="[{ required: true, message: '请选择是否推荐!' }]">
+                    <a-radio-group v-model:value="formState['arecommend']">
                         <a-radio value="true">是</a-radio>
                         <a-radio value="false">否</a-radio>
                     </a-radio-group>
@@ -98,11 +99,11 @@
             <a-card class="acard" v-for="(item, index) in animeList" hoverable>
                 <template #cover>
                     <div class="cover"
-                        :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + item['a_id'] + '.png)' }">
+                        :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + (item['aid']>=10?'0000'+item['aid']:'00000'+item['aid']) + '.png)' }">
                     </div>
                 </template>
-                <a-card-meta :title="item['a_name']" class="acardname">
-                    <template #description>{{ item['a_stats'] }}</template>
+                <a-card-meta :title="item['aname']" class="acardname">
+                    <template #description>{{ item['astats'] }}</template>
                 </a-card-meta>
             </a-card>
         </div>
@@ -119,8 +120,9 @@ const formItemLayout = {
 let formState = reactive<Record<string, any>>({})
 const visible = ref<boolean>(false)
 const animeList = ref([])
-const loadAnime = () => fetch('http://localhost:1314/api/anime/getAllAnime').then(data => data.json()).then(anime => {
+const loadAnime = () => fetch('http://localhost:1314/api/anime/GetAllAnimes').then(data => data.json()).then(anime => {
     animeList.value = anime
+    formState['aid']=animeList.value.length+1    
 })
 loadAnime()
 const showModal = () => {
@@ -130,35 +132,35 @@ const dialogtitle = ref<string>('')
 const dialogreason = ref<string>('')
 const modalVisible = ref<boolean>(false)
 const posterAction = computed(()=>{
-    return `http://localhost:1314/api/file/animePosterUpload/${formState['a_id']}`
+    return `http://localhost:1314/api/file/AnimePosterUpload/${formState['aid']}`
 })
 const setModalVisible = (visible: boolean) => {
     modalVisible.value = visible;
 }
 const handleOk = () => {
-    fetch('http://localhost:1314/api/anime/addAnime', {
+    fetch('http://localhost:1314/api/anime/NewAnime', {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json' // 指定提交方式为表单提交
         }),
         body: JSON.stringify({
-            a_id: formState['a_id'],
-            a_name: formState['a_name'],
-            a_release_date: formState['a_release_date'],
-            a_company: formState['a_company'],
-            a_set: formState['a_set'],
-            a_type: formState['a_type'].toString(),
-            a_desc: formState['a_desc'],
-            a_hot: formState['a_hot'],
-            a_cv: formState['a_cv'],
-            a_stats: formState['a_stats'],
-            a_lang: formState['a_lang'],
-            a_recommend: formState['a_recommend']
+            aid: formState['aid'],
+            aname: formState['aname'],
+            areldate: formState['areldate'],
+            acompany: formState['acompany'],
+            aepisode: formState['aepisode'],
+            type: formState['type'].toString(),
+            adesc: formState['adesc'],
+            ahot: formState['ahot'],
+            cvname: formState['cvname'],
+            astats: formState['astats'],
+            alang: formState['alang'],
+            arecommend: formState['arecommend']
         })
-    }).then(res => res.text()).then(message => {
-        if (message !== 'Success') {
+    }).then(res => res.json()).then(message => {
+         if (message !== 'SUCCESS') {
             dialogtitle.value = '失败'
-            dialogreason.value = '该番剧id已存在'
+            dialogreason.value = message
         } else {
             dialogtitle.value = '成功'
             dialogreason.value = '添加成功'
