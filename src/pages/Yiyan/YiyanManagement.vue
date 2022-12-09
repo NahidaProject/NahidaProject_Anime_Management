@@ -9,11 +9,11 @@
         </a-tooltip>
         <a-input-group v-if="add" compact
             style="display: flex;flex-direction: row;justify-content: space-around;align-items: center;padding: 20px 0;">
-            <a-input v-model:value="yiyan" style="width: 60%;" />
-            <a-input v-model:value="fromwhere" style="width: 30%;" />
+            <a-input v-model:value="Sentence" style="width: 60%;" />
+            <a-input v-model:value="Origin" style="width: 30%;" />
             <a-button type="primary" @click="submit">提交</a-button>
         </a-input-group>
-        <a-table :dataSource="yiyanList" :columns="columns" :pagination="{ pageSize: 6 }"/>
+        <a-table :dataSource="YiYanList" :columns="columns" :pagination="{ pageSize: 6 }"/>
     </div>
 </template>
 
@@ -21,47 +21,49 @@
 import { Ref, ref } from 'vue'
 import { PlusCircleTwoTone } from '@ant-design/icons-vue'
 interface DataItem {
-    yiyan: string,
-    fromwhere: string,
+    Sentence: string,
+    Origin: string,
 }
-const yiyanList: Ref<DataItem[]> = ref([])
-const yiyan = ref<string>('');
-const fromwhere = ref<string>('');
+const YiYanList: Ref<DataItem[]> = ref([])
+const Sentence = ref<string>('');
+const Origin = ref<string>('');
 const add = ref<boolean>(false)
 const columns = [
     {
         title: '一言',
-        dataIndex: 'yiyan',
-        key: 'yiyan',
+        dataIndex: 'Sentence',
+        key: 'Sentence',
         width: '50%',
     },
     {
         title: '来源',
-        dataIndex: 'fromwhere',
-        key: 'fromwhere',
+        dataIndex: 'Origin',
+        key: 'Origin',
     },
 ]
-const getallyiyan = () => fetch('http://localhost:1314/api/yiyan/getallyiyan').then(res => res.json()).then(yiyan => {
-    yiyanList.value = yiyan
+const getallyiyan = () => fetch('http://localhost:1314/api/YiYan/GetAllYiYan').then(res => res.json()).then(yiyan => {
+    YiYanList.value = yiyan
 })
 getallyiyan()
 const addyiyan = () => {
     add.value = !add.value
 }
 const submit = async() => {
-    await fetch('http://localhost:1314/api/yiyan/addyiyan', {
+    await fetch('http://localhost:1314/api/YiYan/NewYiYan', {
         method: 'POST',
         headers: new Headers({
-            'Content-Type': 'application/json' // 指定提交方式为表单提交
+            'Content-Type': 'application/json'
         }),
         body: JSON.stringify({
-            yiyan: yiyan.value,
-            fromwhere: fromwhere.value
+            YiYanID: YiYanList.value.length+1,
+            Sentence: Sentence.value, 
+            Origin: Origin.value,
+            AdminAccount: document.cookie.split('=')[1]
         })
     })
     getallyiyan()
-    yiyan.value = ''
-    fromwhere.value = ''
+    Sentence.value = ''
+    Origin.value = ''
     add.value = !add.value
 }
 </script>
