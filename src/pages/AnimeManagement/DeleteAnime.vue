@@ -4,15 +4,15 @@
             <a-card class="acard" v-for="(item, index) in animeList" hoverable>
                 <template #cover>
                     <div class="cover"
-                        :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + (item['aid']>=10?'0000'+item['aid']:'00000'+item['aid']) + '.png)' }">
+                        :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + (item['AnimeID'] >= 10 ? '0000' + item['AnimeID'] : '00000' + item['AnimeID']) + '.png)' }">
                     </div>
                 </template>
-                <a-card-meta :title="item['aname']" class="acardname">
-                    <template #description>{{ item['astats'] }}</template>
+                <a-card-meta :title="item['AnimeName']" class="acardname">
+                    <template #description>{{ item['AnimeStats'] }}</template>
                 </a-card-meta>
                 <div class="animedelete">
                     <a-tooltip title="删除番剧">
-                        <a-button @click="clickanime(item['aid'])" type="dashed" shape="circle" size="large">
+                        <a-button @click="clickanime(item['AnimeID'])" type="dashed" shape="circle" size="large">
                             <template #icon>
                                 <close-circle-two-tone two-tone-color="#eb2f96" />
                             </template>
@@ -31,17 +31,19 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { CloseCircleTwoTone } from '@ant-design/icons-vue'
+// 模态框状态
 const modalVisible = ref<boolean>(false);
 const setModalVisible = (visible: boolean) => {
     modalVisible.value = visible;
 }
 const animeList = ref([])
+// 加载所有番剧
 const loadAnime = () => fetch('http://localhost:1314/api/anime/GetAllAnimes').then(data => data.json()).then(anime => {
     animeList.value = anime
 })
 loadAnime()
+// 获取点击的番剧ID
 const toremoveid = ref('')
-
 const clickanime = (aid: string) => {
     toremoveid.value = aid
     setModalVisible(true)
@@ -54,7 +56,7 @@ const deleteAnime = () => {
             'Content-Type': 'application/json' // 指定提交方式为表单提交
         }),
         body: JSON.stringify({
-            aid: toremoveid.value
+            AnimeID: toremoveid.value
         })
     }).then(msg => msg.status).then(status => {
         if (status == 200) {
@@ -87,7 +89,8 @@ const deleteAnime = () => {
     background-color: #8bc7ff;
     border-radius: 100px;
 }
-.animedelete{
+
+.animedelete {
     display: flex;
     align-items: center;
     justify-content: center;
