@@ -129,10 +129,10 @@ fetch(`http://localhost:1314/api/admin/${document.cookie.split('=')[1]}`).then(d
     adminName.value = res
 })
 
-const loadUsers = () => fetch('http://localhost:1314/api/news/GetAllNews').then(req => req.json()).then(data => {
+const loadNews = () => fetch('http://localhost:1314/api/news/GetAllNews').then(req => req.json()).then(data => {
     fdata.value = data
 })
-loadUsers()
+loadNews()
 // 获取点击的用户ID
 const ClickNews = (record: any) => {
     formState = record
@@ -148,7 +148,7 @@ const handleOk = () => {
     }).then(res => res.json()).then(data => {
         if (data == 'SUCCESS') {
             visible.value = false
-            loadUsers()
+            loadNews()
         } else {
             console.log(`ERROR${data}`)
         }
