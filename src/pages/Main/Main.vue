@@ -25,7 +25,7 @@
         <a-layout>
             <a-layout-sider width="200" style="user-select: none;">
                 <a-menu v-model:selectedKeys="selectedKeys2" v-model:openKeys="openKeys" mode="inline"
-                    :style="{ height: '100%' }">
+                    :style="{ height: '100%' }" @openChange="onOpenChange">
                     <a-menu-item key="0" class="dashboard">
                         <template #icon>
                             <PieChartOutlined />
@@ -64,6 +64,17 @@
                         </template>
                         <a-menu-item key="7">新增语句</a-menu-item>
                     </a-sub-menu>
+                    <a-sub-menu key="sub4">
+                        <template #title>
+                            <span>
+                                <profile-outlined />
+                                资讯管理
+                            </span>
+                        </template>
+                        <a-menu-item key="8">新增资讯</a-menu-item>
+                        <a-menu-item key="9">更新资讯</a-menu-item>
+                        <a-menu-item key="10">删除资讯</a-menu-item>
+                    </a-sub-menu>
                 </a-menu>
             </a-layout-sider>
             <a-layout>
@@ -76,6 +87,9 @@
                     <UpdateAnime v-if="selectedKeys2.toLocaleString() == '5'"></UpdateAnime>
                     <DeleteAnime v-if="selectedKeys2.toLocaleString() == '6'"></DeleteAnime>
                     <Yiyan v-if="selectedKeys2.toLocaleString() == '7'"></Yiyan>
+                    <AddNews v-if="selectedKeys2.toLocaleString() == '8'"></AddNews>
+                    <UpdateNews v-if="selectedKeys2.toLocaleString() == '9'"></UpdateNews>
+                    <DeleteNews v-if="selectedKeys2.toLocaleString() == '10'"></DeleteNews>
                 </a-layout-content>
             </a-layout>
         </a-layout>
@@ -90,7 +104,8 @@ import {
     CloseCircleTwoTone,
     DownCircleFilled,
     UpCircleFilled,
-    StopFilled
+    StopFilled,
+    ProfileOutlined
 } from '@ant-design/icons-vue'
 import { ref } from 'vue'
 import { appWindow } from '@tauri-apps/api/window'
@@ -102,7 +117,9 @@ import AddAnime from '../AnimeManagement/AddAnime.vue'
 import UpdateAnime from '../AnimeManagement/UpdateAnime.vue'
 import DeleteAnime from '../AnimeManagement/DeleteAnime.vue'
 import Yiyan from '../Yiyan/YiyanManagement.vue'
-
+import AddNews from '../NewsManagement/AddNews.vue'
+import DeleteNews from '../NewsManagement/DeleteNews.vue'
+import UpdateNews from '../NewsManagement/UpdateNews.vue'
 // 默认子菜单
 const selectedKeys2 = ref<string[]>(['0'])
 // 默认菜单
@@ -112,6 +129,12 @@ const username = ref<string>('')
 fetch(`http://localhost:1314/api/admin/${document.cookie.split('=')[1]}`).then(data => data.json()).then(res => {
     username.value = res
 })
+
+const onOpenChange = (openKeys1: string[]) => {
+    if(openKeys1.length!=1){
+        openKeys.value = [openKeys1[1]]
+    }
+};
 
 // 窗口状态
 const appWindowStatus = ref<boolean>(false)
