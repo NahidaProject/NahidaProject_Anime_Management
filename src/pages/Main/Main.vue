@@ -54,6 +54,7 @@
                         <a-menu-item key="4">新增番剧</a-menu-item>
                         <a-menu-item key="5">更新番剧</a-menu-item>
                         <a-menu-item key="6">删除番剧</a-menu-item>
+                        <a-menu-item key="7">新增CV</a-menu-item>
                     </a-sub-menu>
                     <a-sub-menu key="sub3">
                         <template #title>
@@ -62,7 +63,7 @@
                                 一言管理
                             </span>
                         </template>
-                        <a-menu-item key="7">新增语句</a-menu-item>
+                        <a-menu-item key="8">新增语句</a-menu-item>
                     </a-sub-menu>
                     <a-sub-menu key="sub4">
                         <template #title>
@@ -71,9 +72,9 @@
                                 资讯管理
                             </span>
                         </template>
-                        <a-menu-item key="8">新增资讯</a-menu-item>
-                        <a-menu-item key="9">更新资讯</a-menu-item>
-                        <a-menu-item key="10">删除资讯</a-menu-item>
+                        <a-menu-item key="9">新增资讯</a-menu-item>
+                        <a-menu-item key="10">更新资讯</a-menu-item>
+                        <a-menu-item key="11">删除资讯</a-menu-item>
                     </a-sub-menu>
                 </a-menu>
             </a-layout-sider>
@@ -86,10 +87,11 @@
                     <AddAnime v-if="selectedKeys2.toLocaleString() == '4'"></AddAnime>
                     <UpdateAnime v-if="selectedKeys2.toLocaleString() == '5'"></UpdateAnime>
                     <DeleteAnime v-if="selectedKeys2.toLocaleString() == '6'"></DeleteAnime>
-                    <Yiyan v-if="selectedKeys2.toLocaleString() == '7'"></Yiyan>
-                    <AddNews v-if="selectedKeys2.toLocaleString() == '8'"></AddNews>
-                    <UpdateNews v-if="selectedKeys2.toLocaleString() == '9'"></UpdateNews>
-                    <DeleteNews v-if="selectedKeys2.toLocaleString() == '10'"></DeleteNews>
+                    <AddCV v-if="selectedKeys2.toLocaleString() == '7'"></AddCV>
+                    <Yiyan v-if="selectedKeys2.toLocaleString() == '8'"></Yiyan>
+                    <AddNews v-if="selectedKeys2.toLocaleString() == '9'"></AddNews>
+                    <UpdateNews v-if="selectedKeys2.toLocaleString() == '10'"></UpdateNews>
+                    <DeleteNews v-if="selectedKeys2.toLocaleString() == '11'"></DeleteNews>
                 </a-layout-content>
             </a-layout>
         </a-layout>
@@ -120,6 +122,8 @@ import Yiyan from '../Yiyan/YiyanManagement.vue'
 import AddNews from '../NewsManagement/AddNews.vue'
 import DeleteNews from '../NewsManagement/DeleteNews.vue'
 import UpdateNews from '../NewsManagement/UpdateNews.vue'
+import AddCV from '../AnimeManagement/AddCV.vue'
+
 // 默认子菜单
 const selectedKeys2 = ref<string[]>(['0'])
 // 默认菜单
