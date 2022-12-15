@@ -54,7 +54,7 @@
                         <a-menu-item key="4">新增番剧</a-menu-item>
                         <a-menu-item key="5">更新番剧</a-menu-item>
                         <a-menu-item key="6">删除番剧</a-menu-item>
-                        <a-menu-item key="7">新增CV</a-menu-item>
+                        <a-menu-item key="7">声优管理</a-menu-item>
                     </a-sub-menu>
                     <a-sub-menu key="sub3">
                         <template #title>
