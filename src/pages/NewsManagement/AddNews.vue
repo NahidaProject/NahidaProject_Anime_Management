@@ -133,6 +133,7 @@ const handleOk = () => {
         body: JSON.stringify(formState)
     }).then(res => res.json()).then(data => {
         if (data == 'SUCCESS') {
+            formState={}
             visible.value = false
             loadNews()
         } else {
