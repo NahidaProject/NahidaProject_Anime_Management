@@ -31,7 +31,7 @@
                     </span>
                 </template>
                 <template v-else-if="column.key === 'Update'">
-                    <a-tooltip title="修改用户资料">
+                    <a-tooltip title="修改资讯">
                         <a-button @click="ClickNews(record)" type="dashed" shape="circle">
                             <template #icon>
                                 <edit-two-tone />
