@@ -23,14 +23,14 @@
                 <a-timeline-item color="green">数据库动漫表创建, 后端动漫CRUD及前端渲染动漫剧集 2022-11-16</a-timeline-item>
                 <a-timeline-item color="green">后端实现动漫海报/剧集上传, 前端实现动漫播放 2022-11-18</a-timeline-item>
                 <a-timeline-item color="green">一言 2022-11-19</a-timeline-item>
-                <!-- <a-timeline-item color="red">
+                <a-timeline-item color="green">数据库结构/后端接口重构, 实现动漫评论 2022-12-09</a-timeline-item>
+                <a-timeline-item color="green">后端升级至SpringBoot v3.0并实现用户登录校验 2022-12-12</a-timeline-item>
+                <a-timeline-item color="green">前端框架切换为BootStrap v5.2 2022-12-20</a-timeline-item>
+                <a-timeline-item color="red">
                     <template #dot>
                         <clock-circle-outlined style="font-size: 16px" />
-                    </template>
-                    后端提供视频切片, 前端播放视频 2022-11-17
+                    </template>论坛
                 </a-timeline-item>
-                <a-timeline-item>留言板CRUD 2022-11-18</a-timeline-item>
-                <a-timeline-item>项目完成 2022-11-19</a-timeline-item> -->
             </a-timeline>
             <div class="serverstat">
                 <a-tooltip title="服务器状态" :color="status == 'success' ? 'green' : 'red'">
@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import { AntDesignOutlined } from '@ant-design/icons-vue';
+import { AntDesignOutlined,ClockCircleOutlined } from '@ant-design/icons-vue';
 
 const username = ref<String>('')
 let nowtimespan = '你好'
@@ -137,7 +137,23 @@ fetch('http://localhost:1314/api/anime/GetAllAnimes').then(res => res.json()).th
 .floor {
     display: flex;
     margin-top: 30px;
-    padding-top: 30px;
-    border-top: thick double rgba(173, 173, 173, 0.384);
+    height: 50vh;
+    overflow: scroll;
+    overflow-x: hidden;
+    width: fit-content;
+    padding: 10px 15px;
+}
+.floor::-webkit-scrollbar {
+    width: 10px;
+}
+
+.floor::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+}
+
+.floor::-webkit-scrollbar-thumb {
+    background-color: #8bc7ff;
+    border-radius: 100px;
 }
 </style>
