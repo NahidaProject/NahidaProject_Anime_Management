@@ -187,7 +187,6 @@ const handleOk = () => {
 
 .animelist {
     display: flex;
-    width: 66vw;
     flex-wrap: wrap;
     justify-content: space-around;
 }
