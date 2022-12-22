@@ -238,7 +238,7 @@ const updateanime = async (aid: string) => {
 }
 
 const uploadanime = (a_id:string) => {
-    videoAction.value = `http://localhost:1314/api/file/animeVideosUpload/${a_id}`
+    videoAction.value = `http://localhost:1314/api/file/AnimeVideosUpload/${a_id}`
     uploadVisible.value = true
 }
 </script>
