@@ -166,6 +166,9 @@ const videohandleDrop = (e: DragEvent) => {
 }
 const animeList = ref([])
 const loadAnime = () => fetch('http://localhost:1314/api/anime/GetAllAnimes').then(data => data.json()).then(anime => {
+    anime.sort((a:{AnimeReleaseDate:string},b:{AnimeReleaseDate:string})=>{
+        return new Date(b.AnimeReleaseDate).getTime() - new Date(a.AnimeReleaseDate).getTime()
+    })
     animeList.value = anime
 })
 loadAnime()

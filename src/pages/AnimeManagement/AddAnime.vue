@@ -122,6 +122,9 @@ const visible = ref<boolean>(false)
 const animeList = ref([])
 // 加载所有番剧
 const loadAnime = () => fetch('http://localhost:1314/api/anime/GetAllAnimes').then(data => data.json()).then(anime => {
+    anime.sort((a:{AnimeReleaseDate:string},b:{AnimeReleaseDate:string})=>{
+        return new Date(b.AnimeReleaseDate).getTime() - new Date(a.AnimeReleaseDate).getTime()
+    })
     animeList.value = anime
     formState['AnimeID']=animeList.value.length+1    
 })
