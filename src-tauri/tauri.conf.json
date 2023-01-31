@@ -46,7 +46,7 @@
         "webviewInstallMode": {
           "type": "offlineInstaller"
         },
-        "wix":{
+        "wix": {
           "language": "zh-CN"
         }
       }
@@ -60,13 +60,15 @@
     "windows": [
       {
         "fullscreen": false,
-        "transparent":true,
-        "resizable": true,
-        "title": "NahidaProject动漫后台管理系统",
-        "decorations":false,
-        "center":true,
-        "minWidth": 900,
-        "minHeight": 700
+        "transparent": true,
+        "resizable": false,
+        "title": "登录",
+        "label": "login",
+        "decorations": false,
+        "center": true,
+        "width": 830,
+        "height": 310,
+        "url": "/"
       }
     ]
   }

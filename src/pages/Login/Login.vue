@@ -33,8 +33,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { CloseCircleTwoTone } from '@ant-design/icons-vue'
-import router from '../../router/router';
-import { appWindow } from '@tauri-apps/api/window';
+import { appWindow, getAll, WebviewWindow } from '@tauri-apps/api/window';
 interface FormState {
     AdminAccount: string;
     AdminPassword: string;
@@ -62,7 +61,21 @@ const onFinish = (values: { AdminAccount: string; AdminPassword: string }) => {
     }).then(res => res.json()).then(message => {
         if (message == 'SUCCESS') {
             document.cookie = `AdminAccount=${formState.AdminAccount.trim()}`
-            router.push('/index')
+            let toIndex = new WebviewWindow('/index',{
+                url: '/index',
+                title: 'NahidaProject动漫后台管理系统',
+                minWidth: 900,
+                minHeight: 700,
+                resizable: true,
+                center: true,
+                transparent: true,
+                decorations:false
+            })
+            toIndex.once('tauri://created',()=>{
+                if(getAll().find(w=>w.label==='login')){
+                    getAll().find(w=>w.label==='login')?.close()
+                }
+            })
         } else {
             setModalVisible(true)
         }

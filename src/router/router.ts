@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router"
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router"
 import Anime from '../pages/Main/Main.vue'
 import Login from '../pages/Login/Login.vue'
 import Register from '../pages/Register/Register.vue'
@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
     routes,
-    history: createWebHashHistory()
+    history: createWebHistory()
 })
 
 router.beforeEach((to, from, next) => {
