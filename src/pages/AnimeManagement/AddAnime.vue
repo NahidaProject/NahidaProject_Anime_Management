@@ -103,7 +103,7 @@
                     </div>
                 </template>
                 <a-card-meta :title="item['AnimeName']" class="acardname">
-                    <template #description>{{ item['AnimeStats'] }}</template>
+                    <template #description>{{ `${item['AnimeStats']}&nbsp;&nbsp;&nbsp;第${item['AnimeEpisode']}集` }}</template>
                 </a-card-meta>
             </a-card>
         </div>
